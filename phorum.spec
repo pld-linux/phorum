@@ -1,15 +1,14 @@
 # TODO:
-# - update....
-# - SECURITY: http://securitytracker.com/alerts/2004/Jul/1010787.html
+# - move to /usr/share
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	3.4.4
-Release:	1
+Version:	5.0.10
+Release:	0.1
 License:	Apache-like
 Group:		Applications
 Source0:	http://phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	d64dbe39ce95fabfa1f17120a9de4e53
+# Source0-md5:	52519423489765db680acc1b1d17eba5
 URL:		http://phorum.org/
 Requires:	webserver
 Requires:	php >= 4.0.6
