@@ -6,6 +6,7 @@ Release:	1
 License:	Apache-like
 Group:		Applications
 Source0:	http://phorum.org/downloads/%{name}-%{version}.tar.bz2
+# Source0-md5:	21c84f94fc7332b3df3af67a4ba9a925
 URL:		http://phorum.org/
 Requires:       webserver
 Requires:	php >= 4.0.6
