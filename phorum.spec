@@ -5,7 +5,7 @@ Version:	3.4
 Release:	1
 License:	Apache-like
 Group:		Applications
-Source0:	http://phorum.org/downloads/%{name}-%{version}.tar.gz
+Source0:	http://phorum.org/downloads/%{name}-%{version}.tar.bz2
 URL:		http://phorum.org/
 Requires:       webserver
 Requires:	php >= 4.0.6
@@ -58,5 +58,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_phorumdir}/admin/actions
 %{_phorumdir}/admin/lang
 %{_phorumdir}/admin/pages
-%dir %attr(775,root,http) %{_phorumdir}/admin/settings
-%attr(664,root,http) %config(noreplace) %verify(not size mtime md5) %{_phorumdir}/admin/settings/forums.php
+%dir %attr(770,root,http) %{_phorumdir}/admin/settings
+%attr(660,root,http) %config(noreplace) %verify(not size mtime md5) %{_phorumdir}/admin/settings/forums.php
