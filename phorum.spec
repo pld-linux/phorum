@@ -8,7 +8,7 @@ Group:		Applications
 Source0:	http://phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	d64dbe39ce95fabfa1f17120a9de4e53
 URL:		http://phorum.org/
-Requires:       webserver
+Requires:	webserver
 Requires:	php >= 4.0.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -30,7 +30,7 @@ oraz integracja z listami dyskusyjnymi czyni± Phorum atrakcyjnym
 dodatkiem do ka¿dej witryny.
 
 %prep
-%setup -q 
+%setup -q
 
 %install
 rm -rf $RPM_BUILD_ROOT
