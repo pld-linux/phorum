@@ -1,3 +1,6 @@
+# TODO:
+# - update....
+# - SECURITY: http://securitytracker.com/alerts/2004/Jul/1010787.html
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
