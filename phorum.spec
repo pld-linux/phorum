@@ -10,8 +10,8 @@ Group:		Applications
 Source0:	http://phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	52519423489765db680acc1b1d17eba5
 URL:		http://phorum.org/
-Requires:	webserver
 Requires:	php >= 4.0.6
+Requires:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phorumdir	/home/services/httpd/html/phorum
@@ -63,4 +63,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_phorumdir}/admin/lang
 %{_phorumdir}/admin/pages
 %dir %attr(770,root,http) %{_phorumdir}/admin/settings
-%attr(660,root,http) %config(noreplace) %verify(not size mtime md5) %{_phorumdir}/admin/settings/forums.php
+%attr(660,root,http) %config(noreplace) %verify(not md5 mtime size) %{_phorumdir}/admin/settings/forums.php
