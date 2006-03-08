@@ -1,0 +1,11 @@
+--- phorum/common.php~	2005-11-03 23:59:02.000000000 +0200
++++ phorum/common.php	2006-03-08 17:51:34.918772999 +0200
+@@ -106,7 +106,7 @@
+ 
+ // get the database settings and load the database layer
+ if ( empty( $GLOBALS["PHORUM_ALT_DBCONFIG"] ) || $GLOBALS["PHORUM_ALT_DBCONFIG"]==$_REQUEST["PHORUM_ALT_DBCONFIG"] || !defined("PHORUM_WRAPPER") ) {
+-    include_once( "./include/db/config.php" );
++    include_once( "/etc/webapps/phorum/config.php" );
+ } else {
+     $PHORUM["DBCONFIG"] = $GLOBALS["PHORUM_ALT_DBCONFIG"];
+ }
