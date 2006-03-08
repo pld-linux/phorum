@@ -2,7 +2,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	5.0.21
-Release:	0.7
+Release:	0.12
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -60,10 +60,13 @@ mv include/db/config.php.sample .
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs/templates/default}
 
-cp -a *.php $RPM_BUILD_ROOT%{_appdir}
-cp -a cache images include mods portable smileys templates $RPM_BUILD_ROOT%{_appdir}
+cp -a *.php $RPM_BUILD_ROOT%{_appdir}/htdocs
+mv $RPM_BUILD_ROOT%{_appdir}/{htdocs/,}common.php
+cp -a cache include mods templates $RPM_BUILD_ROOT%{_appdir}
+cp -a images smileys $RPM_BUILD_ROOT%{_appdir}/htdocs
+mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
@@ -91,35 +94,36 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.php
-%{_appdir}/attach.php
 %{_appdir}/common.php
-%{_appdir}/control.php
-%{_appdir}/edit.php
-%{_appdir}/file.php
-%{_appdir}/follow.php
-%{_appdir}/index.php
-%{_appdir}/list.php
-%{_appdir}/login.php
-%{_appdir}/moderation.php
-%{_appdir}/post.php
-%{_appdir}/profile.php
-%{_appdir}/read.php
-%{_appdir}/register.php
-%{_appdir}/script.php
-%{_appdir}/search.php
-%{_appdir}/mods
-%{_appdir}/portable
-%{_appdir}/smileys
 %{_appdir}/templates
-%{_appdir}/images
+%{_appdir}/mods
 %dir %{_appdir}/include
 %{_appdir}/include/*.php
 %{_appdir}/include/*.js
 %{_appdir}/include/db
 %{_appdir}/include/controlcenter
 %{_appdir}/include/lang
+%dir %{_appdir}/htdocs
+%{_appdir}/htdocs/attach.php
+%{_appdir}/htdocs/control.php
+%{_appdir}/htdocs/edit.php
+%{_appdir}/htdocs/file.php
+%{_appdir}/htdocs/follow.php
+%{_appdir}/htdocs/index.php
+%{_appdir}/htdocs/list.php
+%{_appdir}/htdocs/login.php
+%{_appdir}/htdocs/moderation.php
+%{_appdir}/htdocs/post.php
+%{_appdir}/htdocs/profile.php
+%{_appdir}/htdocs/read.php
+%{_appdir}/htdocs/register.php
+%{_appdir}/htdocs/script.php
+%{_appdir}/htdocs/search.php
+%{_appdir}/htdocs/smileys
+%{_appdir}/htdocs/templates
+%{_appdir}/htdocs/images
 
 %files setup
 %defattr(644,root,root,755)
-%{_appdir}/admin.php
+%{_appdir}/htdocs/admin.php
 %{_appdir}/include/admin

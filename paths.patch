@@ -31,3 +31,179 @@
          return;
      }
  
+diff -u phorum-5.0.21/admin.php phorum-5.0.21.pld/admin.php
+--- phorum-5.0.21/admin.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/admin.php	2006-03-08 18:23:04.000000000 +0200
+@@ -26,6 +26,7 @@
+     // the code run faster.
+     error_reporting  (E_ERROR | E_WARNING | E_PARSE);
+ 
++    chdir("..");
+     include_once "./common.php";
+     include_once "./include/users.php";
+ 
+diff -u phorum-5.0.21/attach.php phorum-5.0.21.pld/attach.php
+--- phorum-5.0.21/attach.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/attach.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','attach');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/email_functions.php");
+ include_once("./include/thread_info.php");
+diff -u phorum-5.0.21/control.php phorum-5.0.21.pld/control.php
+--- phorum-5.0.21/control.php	2005-10-29 00:02:51.000000000 +0300
++++ phorum-5.0.21.pld/control.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','control');
+ 
++chdir("..");
+ include_once("./common.php");
+ 
+ phorum_require_login();
+diff -u phorum-5.0.21/edit.php phorum-5.0.21.pld/edit.php
+--- phorum-5.0.21/edit.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/edit.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','edit');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/moderation_functions.php");
+ include_once("./include/thread_info.php");
+diff -u phorum-5.0.21/file.php phorum-5.0.21.pld/file.php
+--- phorum-5.0.21/file.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/file.php	2006-03-08 18:23:04.000000000 +0200
+@@ -23,6 +23,7 @@
+ ini_set ( "zlib.output_compression", "0");
+ ini_set ( "output_handler", "");
+ 
++chdir("..");
+ include_once("./common.php");
+ 
+ // checking read-permissions
+diff -u phorum-5.0.21/follow.php phorum-5.0.21.pld/follow.php
+--- phorum-5.0.21/follow.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/follow.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','subscribe');
+ 
++chdir("..");
+ include_once("./common.php");
+ 
+ phorum_require_login();
+diff -u phorum-5.0.21/index.php phorum-5.0.21.pld/index.php
+--- phorum-5.0.21/index.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/index.php	2006-03-08 18:23:04.000000000 +0200
+@@ -17,6 +17,7 @@
+ ///////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','index');
+ 
++chdir("..");
+ include_once( "./common.php" );
+ 
+ include_once( "./include/format_functions.php" );
+diff -u phorum-5.0.21/list.php phorum-5.0.21.pld/list.php
+--- phorum-5.0.21/list.php	2005-04-01 20:10:41.000000000 +0300
++++ phorum-5.0.21.pld/list.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','list');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/format_functions.php");
+ 
+diff -u phorum-5.0.21/login.php phorum-5.0.21.pld/login.php
+--- phorum-5.0.21/login.php	2005-10-15 13:51:01.000000000 +0300
++++ phorum-5.0.21.pld/login.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','login');
+ 
++chdir("..");
+ include_once( "./common.php" );
+ include_once( "./include/users.php" );
+ include_once( "./include/email_functions.php" );
+diff -u phorum-5.0.21/moderation.php phorum-5.0.21.pld/moderation.php
+--- phorum-5.0.21/moderation.php	2005-10-21 13:35:57.000000000 +0300
++++ phorum-5.0.21.pld/moderation.php	2006-03-08 18:23:04.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','moderation');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/moderation_functions.php");
+ include_once("./include/thread_info.php");
+diff -u phorum-5.0.21/post.php phorum-5.0.21.pld/post.php
+--- phorum-5.0.21/post.php	2005-10-04 06:01:02.000000000 +0300
++++ phorum-5.0.21.pld/post.php	2006-03-08 18:23:05.000000000 +0200
+@@ -17,6 +17,7 @@
+ // //////////////////////////////////////////////////////////////////////////////
+ define('phorum_page', 'post');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/email_functions.php");
+ include_once("./include/thread_info.php");
+diff -u phorum-5.0.21/profile.php phorum-5.0.21.pld/profile.php
+--- phorum-5.0.21/profile.php	2005-04-15 16:37:05.000000000 +0300
++++ phorum-5.0.21.pld/profile.php	2006-03-08 18:23:05.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','profile');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/email_functions.php");
+ include_once("./include/format_functions.php");
+diff -u phorum-5.0.21/read.php phorum-5.0.21.pld/read.php
+--- phorum-5.0.21/read.php	2005-04-01 20:10:41.000000000 +0300
++++ phorum-5.0.21.pld/read.php	2006-03-08 18:23:05.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','read');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/email_functions.php");
+ include_once("./include/format_functions.php");
+diff -u phorum-5.0.21/register.php phorum-5.0.21.pld/register.php
+--- phorum-5.0.21/register.php	2005-10-14 23:46:40.000000000 +0300
++++ phorum-5.0.21.pld/register.php	2006-03-08 18:23:05.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','register');
+ 
++chdir("..");
+ include_once("./common.php");
+ include_once("./include/users.php");
+ include_once("./include/profile_functions.php");
+diff -u phorum-5.0.21/script.php phorum-5.0.21.pld/script.php
+--- phorum-5.0.21/script.php	2005-03-17 19:41:22.000000000 +0200
++++ phorum-5.0.21.pld/script.php	2006-03-08 18:23:05.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','script');
+ 
++chdir("..");
+ include_once("./common.php");
+ 
+ // if we are running in the webserver, bail out
+diff -u phorum-5.0.21/search.php phorum-5.0.21.pld/search.php
+--- phorum-5.0.21/search.php	2005-11-03 23:56:46.000000000 +0200
++++ phorum-5.0.21.pld/search.php	2006-03-08 18:23:05.000000000 +0200
+@@ -18,6 +18,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ define('phorum_page','search');
+ 
++chdir("..");
+ include_once("./common.php");
+ 
+ if(!phorum_check_read_common()) {
