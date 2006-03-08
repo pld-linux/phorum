@@ -2,12 +2,13 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	5.0.21
-Release:	0.2
+Release:	0.5
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	9793ba89aa3ab074163e1c61e4cea25c
 Source1:	%{name}-apache.conf
+Patch0:		%{name}-paths.patch
 URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	php >= 3:4.3.0
@@ -36,7 +37,10 @@ dodatkiem do ka¿dej witryny.
 
 %prep
 %setup -q
+%patch0 -p1
 rm {cache,portable,include,mods}/.htaccess
+rm -rf include/db/upgrade/mysql/200{3,4}* # Not supported in PLD
+mv include/db/config.php.sample .
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -47,6 +51,7 @@ cp -a cache images include mods portable smileys templates $RPM_BUILD_ROOT%{_app
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+install -p config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -69,6 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.php
 %{_appdir}/*.php
 %{_appdir}/mods
 %{_appdir}/portable
