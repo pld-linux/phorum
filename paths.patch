@@ -207,3 +207,14 @@ diff -u phorum-5.0.21/search.php phorum-5.0.21.pld/search.php
  include_once("./common.php");
  
  if(!phorum_check_read_common()) {
+--- phorum/include/db/mysql.php~	2006-03-08 18:28:30.000000000 +0200
++++ phorum/include/db/mysql.php	2006-03-08 18:34:26.576921327 +0200
+@@ -3045,7 +3045,7 @@
+ 
+     if(empty($err)){
+ 
+-        $tmp_dir = (substr(__FILE__, 0, 1)=="/") ? "/tmp" : "C:\\Windows\\Temp";
++        $tmp_dir = '/var/cache/phorum';
+ 
+         // set initial settings
+         $settings=array(
