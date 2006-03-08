@@ -9,3 +9,25 @@
  } else {
      $PHORUM["DBCONFIG"] = $GLOBALS["PHORUM_ALT_DBCONFIG"];
  }
+--- ./include/db/mysql.php~	2005-10-21 23:27:53.000000000 +0300
++++ ./include/db/mysql.php	2006-03-08 17:56:25.213522731 +0200
+@@ -10,7 +10,7 @@
+  *    few tables as it likes.  It can store the fields anyway it wants.
+  *    The only thing to worry about is the table_prefix for the tables.
+  *    all tables for a Phorum install should be prefixed with the
+- *    table_prefix that will be entered in include/db/config.php.  This
++ *    table_prefix that will be entered in /etc/webapps/phorum/config.php.  This
+  *    will allow multiple Phorum installations to use the same database.
+  */
+ 
+--- ./include/admin/install.php~	2005-03-17 19:41:22.000000000 +0200
++++ ./include/admin/install.php	2006-03-08 17:56:43.134679959 +0200
+@@ -3,7 +3,7 @@
+     if(!defined("PHORUM_ADMIN")) return;
+ 
+     if(!phorum_db_check_connection()){
+-        echo "A database connection could not be established.  Please edit include/db/config.php.";
++        echo "A database connection could not be established.  Please edit /etc/webapps/phorum/config.php.";
+         return;
+     }
+ 
