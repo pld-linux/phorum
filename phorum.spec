@@ -1,5 +1,5 @@
 Summary:	Phorum is a web based message board written in PHP
-Summary(pl):	Phorum - implementacja forum WWW w PHP
+Summary(pl.UTF-8):   Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	5.0.21
 Release:	0.20
@@ -28,17 +28,17 @@ high-availability and visitor ease of use in mind. Features such as
 mailing list integration, easy customization and simple installation
 make Phorum a powerful add-in to any website.
 
-%description -l pl
+%description -l pl.UTF-8
 Phorum jest forum dyskusyjnym WWW napisanym w PHP. Zamierzeniem
-deweloperów jest uzyskanie niezale¿no¶ci od konkretnego systemu bazy
-danych. £atwa obs³uga dla wypowiadaj±cych siê przybyszów, prosta
-instalacja, mo¿liwo¶æ ³atwego dostosowania do indywidualnych potrzeb
-oraz integracja z listami dyskusyjnymi czyni± Phorum atrakcyjnym
-dodatkiem do ka¿dej witryny.
+deweloperÃ³w jest uzyskanie niezaleÅ¼noÅ›ci od konkretnego systemu bazy
+danych. Åatwa obsÅ‚uga dla wypowiadajÄ…cych siÄ™ przybyszÃ³w, prosta
+instalacja, moÅ¼liwoÅ›Ä‡ Å‚atwego dostosowania do indywidualnych potrzeb
+oraz integracja z listami dyskusyjnymi czyniÄ… Phorum atrakcyjnym
+dodatkiem do kaÅ¼dej witryny.
 
 %package setup
 Summary:	Phorum setup package
-Summary(pl):	Pakiet do wstêpnej konfiguracji Phorum
+Summary(pl.UTF-8):   Pakiet do wstÄ™pnej konfiguracji Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
@@ -47,10 +47,10 @@ Install this package to configure initial Phorum installation. You
 should uninstall this package when you're done, as it considered
 insecure to keep the setup files in place.
 
-%description setup -l pl
-Ten pakiet nale¿y zainstalowaæ w celu wstêpnej konfiguracji Phorum po
-pierwszej instalacji. Potem nale¿y go odinstalowaæ, jako ¿e
-pozostawienie plików instalacyjnych mog³oby byæ niebezpieczne.
+%description setup -l pl.UTF-8
+Ten pakiet naleÅ¼y zainstalowaÄ‡ w celu wstÄ™pnej konfiguracji Phorum po
+pierwszej instalacji. Potem naleÅ¼y go odinstalowaÄ‡, jako Å¼e
+pozostawienie plikÃ³w instalacyjnych mogÅ‚oby byÄ‡ niebezpieczne.
 
 %prep
 %setup -q
