@@ -1,5 +1,5 @@
 Summary:	Phorum is a web based message board written in PHP
-Summary(pl.UTF-8):   Phorum - implementacja forum WWW w PHP
+Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	5.0.21
 Release:	0.20
@@ -38,7 +38,7 @@ dodatkiem do każdej witryny.
 
 %package setup
 Summary:	Phorum setup package
-Summary(pl.UTF-8):   Pakiet do wstępnej konfiguracji Phorum
+Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
