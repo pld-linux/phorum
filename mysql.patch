@@ -1,0 +1,13 @@
+--- phorum/include/db/config.php.sample~	2006-04-20 17:00:12.000000000 +0300
++++ phorum/include/db/config.php.sample	2007-12-27 19:03:24.524419049 +0200
+@@ -19,8 +19,8 @@
+     'type'          =>  'mysql',
+     'name'          =>  'phorum5',
+     'server'        =>  'localhost',
+-    'user'          =>  'phorum5',
+-    'password'      =>  'phorum5',
++    'user'          =>  'mysql',
++    'password'      =>  '',
+     'table_prefix'  =>  'phorum',
+ 
+     // 'down_page'     => 'http://www.example.com/phorum/down.html',
