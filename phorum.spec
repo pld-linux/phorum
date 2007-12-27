@@ -1,12 +1,12 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	5.0.21
-Release:	0.20
+Version:	5.1.25
+Release:	0.2
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	9793ba89aa3ab074163e1c61e4cea25c
+# Source0-md5:	1f4741081156e73752fb49a89687b7de
 Source1:	%{name}-apache.conf
 Patch0:		%{name}-paths.patch
 URL:		http://www.phorum.org/
@@ -55,9 +55,11 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 %prep
 %setup -q
 %patch0 -p1
-rm {cache,portable,include,mods}/.htaccess
-rm -rf include/db/upgrade/mysql/200{3,4}* # Not supported in PLD
+rm {scripts,templates,cache,portable,include,mods}/.htaccess
 mv include/db/config.php.sample .
+
+# kill old files by phorum
+rm -f post.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -66,7 +68,7 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs/templates/default,/v
 cp -a *.php $RPM_BUILD_ROOT%{_appdir}/htdocs
 mv $RPM_BUILD_ROOT%{_appdir}/{htdocs/,}common.php
 cp -a include mods templates $RPM_BUILD_ROOT%{_appdir}
-cp -a images smileys $RPM_BUILD_ROOT%{_appdir}/htdocs
+cp -a images $RPM_BUILD_ROOT%{_appdir}/htdocs
 mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
@@ -101,7 +103,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc docs/* *.txt scripts portable
+%doc docs/* scripts portable
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
@@ -111,27 +113,30 @@ fi
 %{_appdir}/mods
 %dir %{_appdir}/include
 %{_appdir}/include/*.php
-%{_appdir}/include/*.js
 %{_appdir}/include/db
 %{_appdir}/include/controlcenter
 %{_appdir}/include/lang
+%{_appdir}/include/posting
 %dir %{_appdir}/htdocs
-%{_appdir}/htdocs/attach.php
+%{_appdir}/htdocs/addon.php
 %{_appdir}/htdocs/control.php
-%{_appdir}/htdocs/edit.php
 %{_appdir}/htdocs/file.php
 %{_appdir}/htdocs/follow.php
 %{_appdir}/htdocs/index.php
 %{_appdir}/htdocs/list.php
 %{_appdir}/htdocs/login.php
 %{_appdir}/htdocs/moderation.php
-%{_appdir}/htdocs/post.php
+%{_appdir}/htdocs/pm.php
+%{_appdir}/htdocs/posting.php
 %{_appdir}/htdocs/profile.php
 %{_appdir}/htdocs/read.php
+%{_appdir}/htdocs/redirect.php
 %{_appdir}/htdocs/register.php
+%{_appdir}/htdocs/report.php
+%{_appdir}/htdocs/rss.php
 %{_appdir}/htdocs/script.php
 %{_appdir}/htdocs/search.php
-%{_appdir}/htdocs/smileys
+%{_appdir}/htdocs/versioncheck.php
 %{_appdir}/htdocs/templates
 %{_appdir}/htdocs/images
 %dir %attr(770,root,http) /var/cache/phorum
