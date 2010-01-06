@@ -1,15 +1,16 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	5.1.25
-Release:	0.3
+Version:	5.2.14
+Release:	0.1
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	1f4741081156e73752fb49a89687b7de
+# Source0-md5:	944211b4f195a538bcb6e2883d2187c5
 Source1:	%{name}-apache.conf
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-mysql.patch
+Patch2:		docsurl.patch
 URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	webapps
@@ -57,25 +58,31 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+
 rm {scripts,templates,cache,portable,include,mods}/.htaccess
 mv include/db/config.php.sample .
+mv include/api/examples docs/api_examples
 
 # kill old files by phorum
-rm -f post.php
+rm post.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs/templates/default,/var/cache/phorum}
 
-cp -a *.php $RPM_BUILD_ROOT%{_appdir}/htdocs
+cp -a *.php images $RPM_BUILD_ROOT%{_appdir}/htdocs
 mv $RPM_BUILD_ROOT%{_appdir}/{htdocs/,}common.php
-cp -a include mods templates $RPM_BUILD_ROOT%{_appdir}
-cp -a images $RPM_BUILD_ROOT%{_appdir}/htdocs
-mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
 
-install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-install -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-install -p config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
+cp -a include mods templates $RPM_BUILD_ROOT%{_appdir}
+
+# TODO: move themes images to htdocs
+#mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
+#mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
+
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -110,21 +117,36 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.php
+
+%dir %{_appdir}
 %{_appdir}/common.php
 %{_appdir}/templates
 %{_appdir}/mods
+
 %dir %{_appdir}/include
 %{_appdir}/include/*.php
 %{_appdir}/include/db
 %{_appdir}/include/controlcenter
 %{_appdir}/include/lang
 %{_appdir}/include/posting
+%{_appdir}/include/ajax
+%{_appdir}/include/api
+%{_appdir}/include/cache
+
 %dir %{_appdir}/htdocs
+%{_appdir}/htdocs/templates
+%{_appdir}/htdocs/images
+
 %{_appdir}/htdocs/addon.php
+%{_appdir}/htdocs/ajax.php
+%{_appdir}/htdocs/changes.php
 %{_appdir}/htdocs/control.php
+%{_appdir}/htdocs/css.php
+%{_appdir}/htdocs/feed.php
 %{_appdir}/htdocs/file.php
 %{_appdir}/htdocs/follow.php
 %{_appdir}/htdocs/index.php
+%{_appdir}/htdocs/javascript.php
 %{_appdir}/htdocs/list.php
 %{_appdir}/htdocs/login.php
 %{_appdir}/htdocs/moderation.php
@@ -139,8 +161,7 @@ fi
 %{_appdir}/htdocs/script.php
 %{_appdir}/htdocs/search.php
 %{_appdir}/htdocs/versioncheck.php
-%{_appdir}/htdocs/templates
-%{_appdir}/htdocs/images
+
 %dir %attr(770,root,http) /var/cache/phorum
 
 %files setup

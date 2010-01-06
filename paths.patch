@@ -1,7 +1,10 @@
---- phorum-5.1.25/common.php~	2007-12-27 18:43:19.000000000 +0200
-+++ phorum-5.1.25/common.php	2007-12-27 18:46:34.201598153 +0200
-@@ -107,17 +107,17 @@
-     @ini_set("display_errors", 0);
+# require config from /etc/webapps
+# chdir .. before including common.php
+
+--- phorum-5.2.14/common.php~	2010-01-06 19:13:05.000000000 +0200
++++ phorum-5.2.14/common.php	2010-01-06 19:15:15.204911869 +0200
+@@ -84,22 +84,22 @@
+     ob_start();
  
      // Load configuration.
 -    if (! include_once( "./include/db/config.php" )) {
@@ -14,43 +17,29 @@
 +        if (!file_exists("/etc/webapps/phorum/config.php")) { ?>
              Phorum has been installed on this server, but the configuration<br/>
              for the database connection has not yet been made. Please read<br/>
-             <a href="docs/install.txt">docs/install.txt</a> for installation instructions. <?php
+             <a href="docs/install.txt">docs/install.txt</a> for installation
+             instructions. <?php
          } else {
 -            $fp = fopen("./include/db/config.php", "r");
 +            $fp = fopen("/etc/webapps/phorum/config.php", "r");
              // Unable to read the configuration file.
              if (!$fp) { ?>
-                 A database configuration file was found in ./include/db/config.php,<br/>
-@@ -151,7 +151,7 @@
-         header("Location: ".$PHORUM["DBCONFIG"]["down_page"]);
-         exit();
-     } else {
--        echo "The database connection failed. Please check your database configuration in include/db/config.php. If the configuration is okay, check if the database server is running.";
-+        echo "The database connection failed. Please check your database configuration in /etc/webapps/phorum/config.php. If the configuration is okay, check if the database server is running.";
-         exit();
-     }
+                 A database configuration file was found in
+-                ./include/db/config.php,<br/>but Phorum was unable to read it.
++                config.php,<br/>but Phorum was unable to read it.
+                 Please check the file permissions<br/>for this file. <?php
+             // Unknown error.
+             } else {
+--- phorum-5.2.14/include/admin/install.php~	2010-01-06 19:23:20.000000000 +0200
++++ phorum-5.2.14/include/admin/install.php	2010-01-06 19:23:35.421527751 +0200
+@@ -25,7 +25,7 @@
+ include_once("./include/api/user.php");
+ 
+ if(!phorum_db_check_connection()){
+-    echo "A database connection could not be established.  Please edit include/db/config.php.";
++    echo "A database connection could not be established.  Please edit config.php.";
+     return;
  }
---- ./include/db/mysql.php~	2005-10-21 23:27:53.000000000 +0300
-+++ ./include/db/mysql.php	2006-03-08 17:56:25.213522731 +0200
-@@ -10,7 +10,7 @@
-  *    few tables as it likes.  It can store the fields anyway it wants.
-  *    The only thing to worry about is the table_prefix for the tables.
-  *    all tables for a Phorum install should be prefixed with the
-- *    table_prefix that will be entered in include/db/config.php.  This
-+ *    table_prefix that will be entered in /etc/webapps/phorum/config.php.  This
-  *    will allow multiple Phorum installations to use the same database.
-  */
- 
---- ./include/admin/install.php~	2005-03-17 19:41:22.000000000 +0200
-+++ ./include/admin/install.php	2006-03-08 17:56:43.134679959 +0200
-@@ -3,7 +3,7 @@
-     if(!defined("PHORUM_ADMIN")) return;
- 
-     if(!phorum_db_check_connection()){
--        echo "A database connection could not be established.  Please edit include/db/config.php.";
-+        echo "A database connection could not be established.  Please edit /etc/webapps/phorum/config.php.";
-         return;
-     }
  
 --- phorum-5.0.21/admin.php	2005-03-17 19:41:22.000000000 +0200
 +++ phorum-5.0.21.pld/admin.php	2006-03-08 18:23:04.000000000 +0200
@@ -122,12 +111,12 @@
  include_once( "./common.php" );
  include_once( "./include/users.php" );
  include_once( "./include/email_functions.php" );
---- phorum-5.0.21/moderation.php	2005-10-21 13:35:57.000000000 +0300
-+++ phorum-5.0.21.pld/moderation.php	2006-03-08 18:23:04.000000000 +0200
-@@ -18,6 +18,7 @@
+--- phorum-5.2.14/moderation.php~	2010-01-06 19:21:12.000000000 +0200
++++ phorum-5.2.14/moderation.php	2010-01-06 19:22:37.991532354 +0200
+@@ -19,6 +19,7 @@
  ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','moderation');
  
+ define('phorum_page','moderation');
 +chdir("..");
  include_once("./common.php");
  include_once("./include/moderation_functions.php");
@@ -172,12 +161,13 @@
  include_once("./common.php");
  include_once("./include/users.php");
  include_once("./include/profile_functions.php");
---- phorum-5.0.21/script.php	2005-03-17 19:41:22.000000000 +0200
-+++ phorum-5.0.21.pld/script.php	2006-03-08 18:23:05.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
+--- phorum-5.2.14/script.php~	2010-01-06 19:24:04.000000000 +0200
++++ phorum-5.2.14/script.php	2010-01-06 19:24:20.091522133 +0200
+@@ -22,7 +22,7 @@
  define('phorum_page','script');
+ define('PHORUM_SCRIPT', 1);
  
+-chdir(dirname(__FILE__));
 +chdir("..");
  include_once("./common.php");
  
@@ -192,14 +182,3 @@
  include_once("./common.php");
  
  if(!phorum_check_read_common()) {
---- phorum-5.1.25/include/admin/install.php~	2007-12-27 18:47:40.000000000 +0200
-+++ phorum-5.1.25/include/admin/install.php	2007-12-27 18:51:17.809890092 +0200
-@@ -319,7 +319,7 @@
-         case 5:
- 
-             phorum_db_update_settings( array("installed"=>1) );
--            echo "The setup is complete.  You can now go to <a href=\"$_SERVER[PHP_SELF]\">the admin</a> and start making Phorum all your own.<br /><br /><strong>Here are some things you will want to look at:</strong><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=settings\">The General Settings page</a><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=mods\">Pre-installed modules</a><br /><br /><a href=\"docs/faq.txt\">The FAQ</a><br /><br /><a href=\"docs/performance.txt\">How to get peak performance from Phorum</a><br /><br /><strong>For developers:</strong><br /><br /><a href=\"docs/creating_mods.txt\">Module Creation</a><br /><br /><a href=\"docs/permissions.txt\">How Phorum permisssions work</a><br /><br /><a href=\"docs/CODING-STANDARDS\">The Phorum Team's codings standards</a>";
-+            echo "The setup is complete.  You can now go to <a href=\"$_SERVER[PHP_SELF]\">the admin</a> and start making Phorum all your own.<br /><br /><strong>Here are some things you will want to look at:</strong><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=settings\">The General Settings page</a><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=mods\">Pre-installed modules</a><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/faq.txt\">The FAQ</a><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/performance.txt\">How to get peak performance from Phorum</a><br /><br /><strong>For developers:</strong><br /><br /><a href=\"docs/creating_mods.txt\">Module Creation</a><br /><br /><a href=\"docs/permissions.txt\">How Phorum permisssions work</a><br /><br /><a href=\"docs/CODING-STANDARDS\">The Phorum Team's codings standards</a>";
- 
-             break;
- 
