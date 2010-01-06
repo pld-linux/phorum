@@ -2,7 +2,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	5.2.14
-Release:	0.3
+Release:	0.4
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -58,10 +58,6 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 %setup -q
 find '(' -name '*.php' -o -name '*.css' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-
 # htaccess will be provided by apache.conf
 find -name .htaccess | xargs rm -v
 
@@ -75,8 +71,9 @@ rm post.php
 install -d htdocs/admin
 mv *.php images htdocs
 
-# common.php still private
+# still private files (not for web)
 mv htdocs/common.php .
+mv htdocs/script.php .
 
 # admin css
 mv include/admin/css htdocs/admin
@@ -87,6 +84,13 @@ mv portable scripts docs
 # TODO: move themes images to htdocs
 #mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
 #mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
+
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -132,6 +136,7 @@ fi
 
 %dir %{_appdir}
 %{_appdir}/common.php
+%{_appdir}/script.php
 %{_appdir}/templates
 %{_appdir}/mods
 
@@ -172,7 +177,6 @@ fi
 %{_appdir}/htdocs/register.php
 %{_appdir}/htdocs/report.php
 %{_appdir}/htdocs/rss.php
-%{_appdir}/htdocs/script.php
 %{_appdir}/htdocs/search.php
 %{_appdir}/htdocs/versioncheck.php
 
