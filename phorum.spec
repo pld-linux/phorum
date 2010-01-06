@@ -2,14 +2,14 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	5.2.14
-Release:	0.1
+Release:	0.3
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	944211b4f195a538bcb6e2883d2187c5
-Source1:	%{name}-apache.conf
-Patch0:		%{name}-paths.patch
-Patch1:		%{name}-mysql.patch
+Source1:	apache.conf
+Patch0:		paths.patch
+Patch1:		mysql.patch
 Patch2:		docsurl.patch
 URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -56,30 +56,42 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
 %prep
 %setup -q
+find '(' -name '*.php' -o -name '*.css' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 
-rm {scripts,templates,cache,portable,include,mods}/.htaccess
+# htaccess will be provided by apache.conf
+find -name .htaccess | xargs rm -v
+
 mv include/db/config.php.sample .
 mv include/api/examples docs/api_examples
 
 # kill old files by phorum
 rm post.php
 
-%install
-rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs/templates/default,/var/cache/phorum}
+# fixup structure, move public files to htdocs.
+install -d htdocs/admin
+mv *.php images htdocs
 
-cp -a *.php images $RPM_BUILD_ROOT%{_appdir}/htdocs
-mv $RPM_BUILD_ROOT%{_appdir}/{htdocs/,}common.php
+# common.php still private
+mv htdocs/common.php .
 
-cp -a include mods templates $RPM_BUILD_ROOT%{_appdir}
+# admin css
+mv include/admin/css htdocs/admin
+
+# samples
+mv portable scripts docs
 
 # TODO: move themes images to htdocs
 #mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
 #mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
 
+%install
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs/templates/default,/var/cache/phorum}
+cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
@@ -112,7 +124,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc docs/* scripts portable
+%doc docs/*
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
@@ -124,8 +136,10 @@ fi
 %{_appdir}/mods
 
 %dir %{_appdir}/include
+%dir %{_appdir}/include/db
+%{_appdir}/include/db/mysql
+%{_appdir}/include/db/mysql.php
 %{_appdir}/include/*.php
-%{_appdir}/include/db
 %{_appdir}/include/controlcenter
 %{_appdir}/include/lang
 %{_appdir}/include/posting
@@ -166,5 +180,7 @@ fi
 
 %files setup
 %defattr(644,root,root,755)
+%{_appdir}/htdocs/admin
 %{_appdir}/htdocs/admin.php
 %{_appdir}/include/admin
+%{_appdir}/include/db/upgrade

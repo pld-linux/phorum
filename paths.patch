@@ -182,3 +182,48 @@
  include_once("./common.php");
  
  if(!phorum_check_read_common()) {
+--- phorum/include/admin/header.php~	2009-07-22 14:58:57.000000000 +0300
++++ phorum/include/admin/header.php	2010-01-06 20:02:05.938378394 +0200
+@@ -36,7 +36,7 @@
+ 
+     // set the path to the CSS file to pull in
+     $default_admin_css_file = 'default.css';
+-    $admin_css_path = $PHORUM["http_path"].'/include/admin/css/' . $default_admin_css_file;
++    $admin_css_path = $PHORUM["http_path"].'/admin/css/' . $default_admin_css_file;
+ 
+     /**
+      * [hook]
+--- phorum/include/admin/css/default.css~	2010-01-06 20:13:13.000000000 +0200
++++ phorum/include/admin/css/default.css	2010-01-06 20:13:19.085201493 +0200
+@@ -118,19 +118,19 @@
+ .icon-folder-up {
+     width: 22px;
+     padding-left: 22px;
+-    background: url(../../../images/folder_up.png) 0 1px no-repeat;
++    background: url(../../images/folder_up.png) 0 1px no-repeat;
+ }
+ 
+ .icon-folder {
+     width: 22px;
+     padding-left: 22px;
+-    background: url(../../../images/folder.png) 0 1px no-repeat;
++    background: url(../../images/folder.png) 0 1px no-repeat;
+ }
+ 
+ .icon-forum {
+     width: 22px;
+     padding-left: 22px;
+-    background: url(../../../images/forum.png) 0 1px no-repeat;
++    background: url(../../images/forum.png) 0 1px no-repeat;
+ }
+ 
+ .PhorumAdminTableHead
+@@ -154,7 +154,7 @@
+ 
+ .PhorumAdminError
+ {
+-    background-image: url("../../../images/alert.gif");
++    background-image: url("../../images/alert.gif");
+     background-position: 5px 5px;
+     background-repeat: no-repeat;
+     font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica;
