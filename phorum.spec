@@ -1,8 +1,9 @@
+%define		themever	5.2
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	5.2.14
-Release:	0.4
+Version:	%{themever}.14
+Release:	0.7
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -15,6 +16,7 @@ URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	webapps
 Requires:	webserver(php) >= 4.3.0
+Requires:   %{name}(theme) = %{themever}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -54,6 +56,33 @@ Ten pakiet należy zainstalować w celu wstępnej konfiguracji Phorum po
 pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
+%package theme-classic
+Summary:    Classic theme for Phorum
+Group:      Applications/WWW
+Requires:   %{name} = %{version}-%{release}
+Provides:   %{name}(theme) = %{themever}
+
+%description theme-classic
+Classic theme for Phorum.
+
+%package theme-emerald
+Summary:    Emerald theme for Phorum
+Group:      Applications/WWW
+Requires:   %{name} = %{version}-%{release}
+Provides:   %{name}(theme) = %{themever}
+
+%description theme-emerald
+Emerald theme for Phorum.
+
+%package theme-lightweight
+Summary:    Lightweight theme for Phorum
+Group:      Applications/WWW
+Requires:   %{name} = %{version}-%{release}
+Provides:   %{name}(theme) = %{themever}
+
+%description theme-lightweight
+Lightweight theme for Phorum.
+
 %prep
 %setup -q
 find '(' -name '*.php' -o -name '*.css' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
@@ -81,9 +110,12 @@ mv include/admin/css htdocs/admin
 # samples
 mv portable scripts docs
 
-# TODO: move themes images to htdocs
-#mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
-#mv $RPM_BUILD_ROOT%{_appdir}/{,htdocs/}templates/default/images
+# move themes images to htdocs
+for a in templates/*/images; do
+	d=$(dirname "$a");
+	install -d htdocs/$d
+	mv $a htdocs/$d
+done
 
 %patch0 -p1
 %patch1 -p1
@@ -94,7 +126,7 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs/templates/default,/var/cache/phorum}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},/var/cache/phorum}
 cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
@@ -153,7 +185,7 @@ fi
 %{_appdir}/include/cache
 
 %dir %{_appdir}/htdocs
-%{_appdir}/htdocs/templates
+%dir %{_appdir}/htdocs/templates
 %{_appdir}/htdocs/images
 
 %{_appdir}/htdocs/addon.php
@@ -188,3 +220,18 @@ fi
 %{_appdir}/htdocs/admin.php
 %{_appdir}/include/admin
 %{_appdir}/include/db/upgrade
+
+%files theme-classic
+%defattr(644,root,root,755)
+%{_appdir}/templates/classic
+%{_appdir}/htdocs/templates/classic
+
+%files theme-emerald
+%defattr(644,root,root,755)
+%{_appdir}/templates/emerald
+%{_appdir}/htdocs/templates/emerald
+
+%files theme-lightweight
+%defattr(644,root,root,755)
+%{_appdir}/templates/lightweight
+%{_appdir}/htdocs/templates/lightweight
