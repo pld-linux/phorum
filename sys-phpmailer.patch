@@ -1,14 +1,15 @@
---- phorum-5.2.14/mods/smtp_mail/smtp_mail.php~	2010-01-12 15:50:48.000000000 +0200
-+++ phorum-5.2.14/mods/smtp_mail/smtp_mail.php	2010-01-12 17:13:03.113804026 +0200
-@@ -35,10 +35,9 @@
+--- phorum-5.2.14/mods/smtp_mail/smtp_mail.php~	2010-01-12 19:24:42.000000000 +0200
++++ phorum-5.2.14/mods/smtp_mail/smtp_mail.php	2010-01-12 19:25:15.725706726 +0200
+@@ -35,11 +35,8 @@
  
          try {
  
--			require_once("./mods/smtp_mail/phpmailer/class.phpmailer.php");  
+-			require_once PHORUM_DIR.'/mods/smtp_mail/phpmailer/class.phpmailer.php';  
+-			  
 +			require_once 'class.phpmailer.php';
- 			  
  			$mail = new PHPMailer();  
 -			$mail->PluginDir = "./mods/smtp_mail/phpmailer/";
- 			  
+-			  
              $mail->CharSet  = $PHORUM["DATA"]["CHARSET"];
              $mail->Encoding = $PHORUM["DATA"]["MAILENCODING"];
+ 			$mail->Mailer   = "smtp";  

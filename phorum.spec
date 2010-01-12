@@ -3,7 +3,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.20
+Release:	0.23
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -120,6 +120,28 @@ for a in templates/*/images; do
 	install -d htdocs/$d
 	mv $a htdocs/$d
 done
+
+# unify loading includes
+a="'" q='"'
+grep -Elr '(include|require)_once' include htdocs mods *.php | xargs sed -i -e "
+# common.php
+	s,\\(include\\|require\\)_once(\s*[$a$q]\./common.php[$a$q]\s*);,require_once PHORUM_DIR.'/common.php';,g
+	s,include_once(\s*[$a$q]./common.php[$a$q]\s*);,require_once PHORUM_DIR.'/common.php';,g
+	s,include_once\s*[$a$q]./common.php[$a$q]\s*;,require_once PHORUM_DIR.'/common.php';,g
+
+# random includes
+	s,include_once\s*([$a$q]include/\([^$a$q]\\+\)[$a$q]);,require_once PHORUM_INCLUDES_DIR.'/\\1';,g
+	s,\\(include\\|require\\)_once\s*(\s*[$a$q]\./include/\([^$a$q]\\+\)[$a$q]\s*);,require_once PHORUM_INCLUDES_DIR.'/\\2';,g
+	s,\\(include\\|require\\)_once\s*[$a$q]\./include/\([^$a$q]\\+\)[$a$q];,require_once PHORUM_INCLUDES_DIR.'/\\2';,g
+	s,include\s*([$a$q]\./include/\([^$a$q]\\+\)[$a$q]);,include PHORUM_INCLUDES_DIR.'/\\1';,g
+
+# mods
+	s,require_once\s*([$a$q]\./mods/\([^$a$q]\\+\)[$a$q]);,require_once PHORUM_DIR.'/mods/\\1';,g
+"
+
+# update path to common.php
+sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once '../common.php';," htdocs/*.php
+sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';," *.php
 
 %patch0 -p1
 %patch1 -p1

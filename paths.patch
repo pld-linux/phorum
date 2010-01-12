@@ -1,9 +1,15 @@
-# require config from /etc/webapps
-# chdir .. before including common.php
-
---- phorum-5.2.14/common.php~	2010-01-06 19:13:05.000000000 +0200
-+++ phorum-5.2.14/common.php	2010-01-06 19:15:15.204911869 +0200
-@@ -84,22 +84,22 @@
+--- phorum/common.php	2010-01-12 19:23:19.129687819 +0200
++++ phorum/common.php	2010-01-12 19:36:17.512942870 +0200
+@@ -20,6 +20,8 @@
+ // Check that this file is not loaded directly.
+ if ( basename( __FILE__ ) == basename( $_SERVER["PHP_SELF"] ) ) exit();
+ 
++define('PHORUM_DIR', dirname(__FILE__));
++define('PHORUM_INCLUDES_DIR', PHORUM_DIR.'/include');
+ 
+ // ----------------------------------------------------------------------
+ // Initialize variables and constants and load required libraries
+@@ -82,22 +84,22 @@
      ob_start();
  
      // Load configuration.
@@ -30,6 +36,121 @@
                  Please check the file permissions<br/>for this file. <?php
              // Unknown error.
              } else {
+@@ -134,7 +136,7 @@
+ 
+ // Load the database layer.
+ $PHORUM['DBCONFIG']['type'] = basename($PHORUM['DBCONFIG']['type']);
+-require_once( "./include/db/{$PHORUM['DBCONFIG']['type']}.php" );
++require_once PHORUM_INCLUDES_DIR."/db/{$PHORUM['DBCONFIG']['type']}.php";
+ 
+ // Try to setup a connection to the database.
+ if(!phorum_db_check_connection()){
+@@ -217,7 +219,7 @@
+ // Load the caching-layer. You can specify a different one in the settings.
+ // One caching layer *needs* to be loaded.
+ $PHORUM['cache_layer'] = basename($PHORUM['cache_layer']);
+-require_once PHORUM_INCLUDES_DIR.'/cache/$PHORUM[cache_layer].php';
++require_once PHORUM_INCLUDES_DIR.'/cache/'.$PHORUM['cache_layer'].'.php';
+ 
+ // Load phorum_get_url().
+ // This function is used for generating all Phorum URLs.
+@@ -227,7 +229,7 @@
+ // module authors a chance to override them. This can be especially useful
+ // for distibuting a module that contains a full Phorum template as well.
+ // For switching, the function phorum_switch_template() can be used.
+-$PHORUM['template_path'] = './templates';
++$PHORUM['template_path'] = PHORUM_DIR.'/templates';
+ $PHORUM['template_http_path'] = $PHORUM['http_path'].'/templates';
+ 
+ // ----------------------------------------------------------------------
+@@ -691,9 +693,9 @@
+ 
+     }
+ 
+-    if ( !isset( $PHORUM["language"] ) || empty( $PHORUM["language"] ) || !file_exists( "./include/lang/$PHORUM[language].php" ) )
++    if (!isset($PHORUM["language"]) || empty($PHORUM["language"]) || !file_exists(PHORUM_INCLUDES_DIR."/lang/$PHORUM[language].php"))
+         $PHORUM["language"] = $PHORUM["default_forum_options"]["language"];
+-    if ( !file_exists("./include/lang/$PHORUM[language].php") ) {
++    if ( !file_exists(PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php") ) {
+         $PHORUM["language"] = PHORUM_DEFAULT_LANGUAGE;
+     }
+ 
+@@ -714,8 +716,8 @@
+     }
+ 
+     $PHORUM['language'] = basename($PHORUM['language']);
+-    if ( file_exists( "./include/lang/$PHORUM[language].php" ) ) {
+-        require_once PHORUM_INCLUDES_DIR.'/lang/$PHORUM[language].php';
++    if ( file_exists( PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php" ) ) {
++        require_once PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php";
+     }
+     // load languages for localized modules
+     if ( isset( $PHORUM["hooks"]["lang"] ) && is_array($PHORUM["hooks"]["lang"]) ) {
+@@ -723,11 +725,11 @@
+         {
+             // load mods for this hook
+             $mod = basename($mod);
+-            if ( file_exists( "./mods/$mod/lang/$PHORUM[language].php" ) ) {
+-                require_once "./mods/$mod/lang/$PHORUM[language].php";
++            if ( file_exists(PHORUM_DIR."/mods/$mod/lang/$PHORUM[language].php" ) ) {
++                require_once PHORUM_DIR."/mods/$mod/lang/$PHORUM[language].php";
+             }
+-            elseif ( file_exists( "./mods/$mod/lang/".PHORUM_DEFAULT_LANGUAGE.".php" ) ) {
+-                require_once "./mods/$mod/lang/".PHORUM_DEFAULT_LANGUAGE.".php";
++            elseif ( file_exists(PHORUM_DIR."/mods/$mod/lang/".PHORUM_DEFAULT_LANGUAGE.".php" ) ) {
++                require_once PHORUM_DIR."/mods/$mod/lang/".PHORUM_DEFAULT_LANGUAGE.".php";
+             }
+         }
+     }
+@@ -998,8 +1000,8 @@
+     // strings at some point after all, for example if we reset the
+     // author name in messages for deleted users to "anonymous".
+     $PHORUM["language"] = basename($PHORUM["default_forum_options"]["language"]);
+-    if (file_exists("./include/lang/$PHORUM[language].php")) {
+-        require_once PHORUM_INCLUDES_DIR.'/lang/$PHORUM[language].php';
++    if (file_exists(PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php")) {
++        require_once PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php";
+     }
+ }
+ 
+@@ -1308,7 +1310,7 @@
+             // could be an incomplete or empty template.
+             $postfix = '/info.php';
+         } else {
+-            $prefix = './mods/'.basename($module).'/templates';
++            $prefix = PHORUM_DIR.'/mods/'.basename($module).'/templates';
+             $postfix = '';
+         }
+ 
+@@ -1669,10 +1671,10 @@
+         foreach( $PHORUM["hooks"][$hook]["mods"] as $mod ) {
+             // load mods for this hook
+             $mod = basename($mod);
+-            if ( file_exists( "./mods/$mod/$mod.php" ) ) {
+-                require_once "./mods/$mod/$mod.php";
+-            } elseif ( file_exists( "./mods/$mod.php" ) ) {
+-                require_once "./mods/$mod.php";
++            if ( file_exists( PHORUM_DIR."/mods/$mod/$mod.php" ) ) {
++                require_once PHORUM_DIR."/mods/$mod/$mod.php";
++            } elseif ( file_exists( PHORUM_DIR."/mods/$mod.php" ) ) {
++                require_once PHORUM_DIR."/mods/$mod.php";
+             }
+         }
+ 
+@@ -1759,10 +1761,10 @@
+ 
+     $langs = array();
+ 
+-    $d = dir( "./include/lang" );
++    $d = dir(PHORUM_INCLUDES_DIR."/lang" );
+     while ( false !== ( $entry = $d->read() ) ) {
+-        if ( substr( $entry, -4 ) == ".php" && is_file( "./include/lang/$entry" ) ) {
+-            @include "./include/lang/$entry";
++        if ( substr( $entry, -4 ) == ".php" && is_file(PHORUM_INCLUDES_DIR."/lang/$entry" ) ) {
++            include PHORUM_INCLUDES_DIR."/lang/$entry";
+             if ( !isset( $language_hide ) || empty( $language_hide ) || defined( "PHORUM_ADMIN" ) ) {
+                 $langs[str_replace( ".php", "", $entry )] = $language;
+             } else {
 --- phorum-5.2.14/include/admin/install.php~	2010-01-06 19:23:20.000000000 +0200
 +++ phorum-5.2.14/include/admin/install.php	2010-01-06 19:23:35.421527751 +0200
 @@ -25,7 +25,7 @@
@@ -41,136 +162,6 @@
      return;
  }
  
---- phorum-5.0.21/htdocs/admin.php	2005-03-17 19:41:22.000000000 +0200
-+++ phorum-5.0.21.pld/htdocs/admin.php	2006-03-08 18:23:04.000000000 +0200
-@@ -26,6 +26,7 @@
-     // the code run faster.
-     error_reporting  (E_ERROR | E_WARNING | E_PARSE);
- 
-+    chdir("..");
-     include_once "./common.php";
-     include_once "./include/users.php";
- 
---- phorum-5.0.21/htdocs/control.php	2005-10-29 00:02:51.000000000 +0300
-+++ phorum-5.0.21.pld/htdocs/control.php	2006-03-08 18:23:04.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','control');
- 
-+chdir("..");
- include_once("./common.php");
- 
- phorum_require_login();
---- phorum-5.0.21/htdocs/file.php	2005-03-17 19:41:22.000000000 +0200
-+++ phorum-5.0.21.pld/htdocs/file.php	2006-03-08 18:23:04.000000000 +0200
-@@ -23,6 +23,7 @@
- ini_set ( "zlib.output_compression", "0");
- ini_set ( "output_handler", "");
- 
-+chdir("..");
- include_once("./common.php");
- 
- // checking read-permissions
---- phorum-5.0.21/htdocs/follow.php	2005-03-17 19:41:22.000000000 +0200
-+++ phorum-5.0.21.pld/htdocs/follow.php	2006-03-08 18:23:04.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','subscribe');
- 
-+chdir("..");
- include_once("./common.php");
- 
- phorum_require_login();
---- phorum-5.0.21/htdocs/index.php	2005-03-17 19:41:22.000000000 +0200
-+++ phorum-5.0.21.pld/htdocs/index.php	2006-03-08 18:23:04.000000000 +0200
-@@ -17,6 +17,7 @@
- ///////////////////////////////////////////////////////////////////////////////
- define('phorum_page','index');
- 
-+chdir("..");
- include_once( "./common.php" );
- 
- include_once( "./include/format_functions.php" );
---- phorum-5.0.21/htdocs/list.php	2005-04-01 20:10:41.000000000 +0300
-+++ phorum-5.0.21.pld/htdocs/list.php	2006-03-08 18:23:04.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','list');
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/format_functions.php");
- 
---- phorum-5.0.21/htdocs/login.php	2005-10-15 13:51:01.000000000 +0300
-+++ phorum-5.0.21.pld/htdocs/login.php	2006-03-08 18:23:04.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','login');
- 
-+chdir("..");
- include_once( "./common.php" );
- include_once( "./include/users.php" );
- include_once( "./include/email_functions.php" );
---- phorum-5.2.14/htdocs/moderation.php~	2010-01-06 19:21:12.000000000 +0200
-+++ phorum-5.2.14/htdocs/moderation.php	2010-01-06 19:22:37.991532354 +0200
-@@ -19,6 +19,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- 
- define('phorum_page','moderation');
-+chdir("..");
- include_once("./common.php");
- include_once("./include/moderation_functions.php");
- include_once("./include/thread_info.php");
---- phorum-5.1.25/htdocs/posting.php~	2007-06-29 18:03:25.000000000 +0300
-+++ phorum-5.1.25/htdocs/posting.php	2007-12-27 18:49:04.318221622 +0200
-@@ -55,6 +55,7 @@
-     define('phorum_page', 'post');
- }
- 
-+chdir("..");
- include_once("./common.php");
- include_once("include/format_functions.php");
- 
---- phorum-5.0.21/htdocs/profile.php	2005-04-15 16:37:05.000000000 +0300
-+++ phorum-5.0.21.pld/htdocs/profile.php	2006-03-08 18:23:05.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','profile');
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/email_functions.php");
- include_once("./include/format_functions.php");
---- phorum-5.0.21/htdocs/read.php	2005-04-01 20:10:41.000000000 +0300
-+++ phorum-5.0.21.pld/htdocs/read.php	2006-03-08 18:23:05.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','read');
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/email_functions.php");
- include_once("./include/format_functions.php");
---- phorum-5.0.21/htdocs/register.php	2005-10-14 23:46:40.000000000 +0300
-+++ phorum-5.0.21.pld/htdocs/register.php	2006-03-08 18:23:05.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','register');
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/users.php");
- include_once("./include/profile_functions.php");
---- phorum-5.0.21/htdocs/search.php	2005-11-03 23:56:46.000000000 +0200
-+++ phorum-5.0.21.pld/htdocs/search.php	2006-03-08 18:23:05.000000000 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','search');
- 
-+chdir("..");
- include_once("./common.php");
- 
- if(!phorum_check_read_common()) {
 --- phorum/include/admin/header.php~	2009-07-22 14:58:57.000000000 +0300
 +++ phorum/include/admin/header.php	2010-01-06 20:02:05.938378394 +0200
 @@ -36,7 +36,7 @@
@@ -216,103 +207,86 @@
      background-position: 5px 5px;
      background-repeat: no-repeat;
      font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica;
---- phorum-5.2.14/htdocs/addon.php	2010-01-11 16:01:43.649536786 +0200
-+++ phorum-5.2.14-paths/htdocs/addon.php	2010-01-11 16:00:14.376410817 +0200
-@@ -77,6 +77,7 @@
+--- phorum-5.2.14/include/admin/cache.php~	2010-01-11 16:30:31.000000000 +0200
++++ phorum-5.2.14/include/admin/cache.php	2010-01-11 16:58:45.262528168 +0200
+@@ -32,7 +32,7 @@
+             case "cache":
  
- define('phorum_page','addon');
+                 if ( empty( $value ) ) {
+-                    $new_settings[$field] = "/tmp";
++                    $new_settings[$field] = "/var/cache/phorum";
+                 } elseif ( !file_exists( $value ) ) {
+                     $error = "This cache directory does not exist.  Please create it with the proper permissions.";
+                 } else {
+--- phorum/include/db/mysql.php~	2010-01-12 18:38:55.000000000 +0200
++++ phorum/include/db/mysql.php	2010-01-12 18:42:08.086600820 +0200
+@@ -7636,7 +7636,7 @@
+ );
  
-+chdir("..");
- include_once( "./common.php" );
+ // Load the specific code for the PHP extension that we use.
+-$extfile = "./include/db/mysql/{$ext}.php";
++$extfile = PHORUM_INCLUDES_DIR."/db/mysql/{$ext}.php";
+ if (!file_exists($extfile)) trigger_error(
+    "The Phorum MySQL database layer is unable to find the extension " .
+    "file $extfile on the system. Check if all Phorum files are uploaded " .
+--- phorum-5.2.14/htdocs/ajax.php~	2010-01-12 19:06:49.000000000 +0200
++++ phorum-5.2.14/htdocs/ajax.php	2010-01-12 19:07:09.826450999 +0200
+@@ -154,7 +154,7 @@
+ }
  
- // Bail out early if there are no modules enabled that implement
---- phorum-5.2.14/htdocs/ajax.php	2010-01-11 16:01:43.649536786 +0200
-+++ phorum-5.2.14-paths/htdocs/ajax.php	2010-01-11 16:00:22.517084899 +0200
-@@ -24,6 +24,7 @@
+ // Check if the Ajax call has a core handler script.
+-if (file_exists("./include/ajax/call.$ajax_call.php")) {
++if (file_exists(PHORUM_INCLUDES_DIR."/ajax/call.$ajax_call.php")) {
+     include PHORUM_INCLUDES_DIR.'/ajax/call.$ajax_call.php';
+     exit();
+ }
+--- phorum/htdocs/javascript.php	2010-01-12 19:00:24.036492037 +0200
++++ phorum/htdocs/javascript.php	2010-01-12 19:02:34.413145270 +0200
+@@ -31,15 +31,15 @@
+ $module_registrations[] = array(
+     'module'    => 'core',
+     'source'    => 'file(include/ajax/client.js.php)',
+-    'cache_key' => filemtime('./include/ajax/client.js.php') .
++    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/ajax/client.js.php') .
+                    $PHORUM['DATA']['URL']['AJAX']
+ );
  
- define('phorum_page', 'ajax');
- 
-+chdir("..");
- require_once('./common.php');
- require_once('./include/api/json.php');
- 
---- phorum-5.2.14/htdocs/changes.php	2010-01-11 16:01:44.246269735 +0200
-+++ phorum-5.2.14-paths/htdocs/changes.php	2010-01-11 16:00:26.976419856 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','changes');
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/format_functions.php");
- include_once("./include/diff_patch.php");
---- phorum-5.2.14/htdocs/css.php	2010-01-11 16:01:43.649536786 +0200
-+++ phorum-5.2.14-paths/htdocs/css.php	2010-01-11 16:00:34.303030241 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- 
- define('phorum_page','css');
-+chdir("..");
- require_once('./common.php');
- 
- // Set to FALSE to disable CSS compression.
---- phorum-5.2.14/htdocs/feed.php	2010-01-11 16:01:44.182870087 +0200
-+++ phorum-5.2.14-paths/htdocs/feed.php	2010-01-11 16:00:39.736210271 +0200
-@@ -20,6 +20,7 @@
- 
- define("phorum_page", "feed");
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/format_functions.php");
- include_once("./include/feed_functions.php");
---- phorum-5.2.14/htdocs/javascript.php	2010-01-11 16:01:43.362870559 +0200
-+++ phorum-5.2.14-paths/htdocs/javascript.php	2010-01-11 16:00:45.322876145 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- 
- define('phorum_page','javascript');
-+chdir("..");
- require_once("./common.php");
- 
- // So we can use {URL->HTTP_PATH} in the templates.
---- phorum-5.2.14/htdocs/pm.php	2010-01-11 16:01:43.372872367 +0200
-+++ phorum-5.2.14-paths/htdocs/pm.php	2010-01-11 16:00:55.022939080 +0200
-@@ -32,6 +32,7 @@
- 
- define('phorum_page','pm');
- 
-+chdir("..");
- include_once("./common.php");
- 
- phorum_require_login();
---- phorum-5.2.14/htdocs/redirect.php	2010-01-11 16:01:44.182870087 +0200
-+++ phorum-5.2.14-paths/htdocs/redirect.php	2010-01-11 16:01:06.719540737 +0200
-@@ -24,6 +24,7 @@
- 
- define('phorum_page', 'redirect');
- 
-+chdir("..");
- require_once("./common.php");
- 
- if (isset($PHORUM["args"]["phorum_redirect_to"])) {
---- phorum-5.2.14/htdocs/report.php	2010-01-11 16:01:43.366204448 +0200
-+++ phorum-5.2.14-paths/htdocs/report.php	2010-01-11 16:01:09.336206826 +0200
-@@ -18,6 +18,7 @@
- ////////////////////////////////////////////////////////////////////////////////
- define('phorum_page','report');
- 
-+chdir("..");
- include_once("./common.php");
- include_once("./include/email_functions.php");
- include_once("./include/format_functions.php");
---- phorum-5.2.14/htdocs/versioncheck.php	2010-01-11 16:01:44.253079929 +0200
-+++ phorum-5.2.14-paths/htdocs/versioncheck.php	2010-01-11 16:01:11.172873461 +0200
-@@ -24,6 +24,7 @@
- // so downtime of the phorum.org website won't affect the performance of
- // the admin interface for Phorum users.
- 
-+chdir("..");
- require_once('./common.php');
- 
- if (isset($_COOKIE["phorum_upgrade_available"])) {
+ // Add template specific javascript code, if available. The template writer
+ // can put the javascript code to include in the file
+ // "templates/<name>/javascript.tpl" or "templates/<name>/javascript.php".
+-if (file_exists("./templates/{$PHORUM['template']}/javascript.tpl") ||
+-    file_exists("./templates/{$PHORUM['template']}/javascript.php")) {
++if (file_exists(PHORUM_DIR."/templates/{$PHORUM['template']}/javascript.tpl") ||
++    file_exists(PHORUM_DIR."/templates/{$PHORUM['template']}/javascript.php")) {
+     $module_registrations[] = array(
+         'module' => $PHORUM['template'] . ' template',
+         'source' => 'template(javascript)'
+@@ -234,10 +234,10 @@
+         {
+             case "file":
+                 ob_start();
+-                // Make sure that relative paths start with "./",
+-                // just in case "." is not in the PHP include path.
++                // Make relative paths start with PHORUM_DIR,
++                // as we moved files around.
+                 $path = $r['source'][0] == '/'
+-                      ? $r['source'] : './'.$r['source'];
++                      ? $r['source'] : PHORUM_DIR.'/'.$r['source'];
+                 include($path);
+                 $content .= ob_get_contents();
+                 ob_end_clean();
+--- phorum/htdocs/css.php~	2010-01-12 19:27:06.000000000 +0200
++++ phorum/htdocs/css.php	2010-01-12 19:30:47.253394705 +0200
+@@ -274,7 +274,11 @@
+         {
+             case "file":
+                 ob_start();
+-                include($r['source']);
++                // Make relative paths start with PHORUM_DIR,
++                // as we moved files around.
++                $path = $r['source'][0] == '/'
++                     ? $r['source'] : PHORUM_DIR.'/'.$r['source'];
++                include($path);
+                 $add .= ob_get_contents();
+                 ob_end_clean();
+                 break;
