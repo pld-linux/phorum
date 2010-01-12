@@ -3,7 +3,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.7
+Release:	0.20
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -12,6 +12,7 @@ Source1:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
 Patch2:		docsurl.patch
+Patch3:		sys-phpmailer.patch
 URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	webapps
@@ -85,7 +86,10 @@ Lightweight theme for Phorum.
 
 %prep
 %setup -q
-find '(' -name '*.php' -o -name '*.css' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+find '(' -name '*.php' -o -name '*.css' -o -name '*.js' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+
+# php-phpmailer
+rm -rf mods/smtp_mail/phpmailer
 
 # htaccess will be provided by apache.conf
 find -name .htaccess | xargs rm -v
@@ -120,6 +124,7 @@ done
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
