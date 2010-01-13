@@ -321,8 +321,8 @@
      if($module!="help") require_once PHORUM_INCLUDES_DIR.'/admin/footer.php';
      ob_end_flush();
  
---- phorum/include/api/modules.php~	2010-01-13 19:03:16.000000000 +0200
-+++ phorum/include/api/modules.php	2010-01-13 21:36:05.906916979 +0200
+--- phorum/include/api/modules.php	2010-01-13 21:36:05.906916979 +0200
++++ phorum-5.2.14/include/api/modules.php	2010-01-13 22:41:33.709858271 +0200
 @@ -95,10 +95,10 @@
  
      require_once PHORUM_INCLUDES_DIR.'/version_functions.php';
@@ -352,3 +352,233 @@
              if($data = stristr($data, "/* phorum module info")){
                  $data = substr($data, 0, strpos($data, "*/"));
                  $lines = preg_split('!(\r|\n|\r\n)!', $data);
+@@ -196,7 +196,7 @@
+             $info['enabled'] = 0;
+         }
+ 
+-        if (file_exists("./mods/$entry/settings.php")){
++        if (file_exists(PHORUM_DIR."/mods/$entry/settings.php")){
+             $info["settings"]=true;
+         } else {
+             $info["settings"]=false;
+@@ -524,8 +524,8 @@
+         foreach ($PHORUM['mods'] as $mod => $active)
+         {
+             if (!$active) continue;
+-            $info = "./mods/$mod/info.txt";
+-            $filemod = "./mods/$mod.php";
++            $info = PHORUM_DIR."/mods/$mod/info.txt";
++            $filemod = PHORUM_DIR."/mods/$mod.php";
+             if (file_exists($info)) {
+                 $time = @filemtime($info);
+             } elseif (file_exists($filemod)) {
+--- phorum-5.2.14/include/admin/manage_languages.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/include/admin/manage_languages.php	2010-01-13 22:39:37.387371140 +0200
+@@ -665,7 +665,7 @@
+ 
+     // For the announcement module, we keep the language strings in
+     // the main langage file.
+-    phorum_extract_language_strings_recurse("./mods/announcements");
++    phorum_extract_language_strings_recurse(PHORUM_DIR."/mods/announcements");
+ 
+     return $extract_strings;
+ }
+--- phorum-5.2.14/include/admin/mods.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/include/admin/mods.php	2010-01-13 22:40:09.750492277 +0200
+@@ -110,7 +110,7 @@
+         $moreinfo[] = "<a href=\"".$info["url"]."\">web site</a>";
+     }
+     foreach(array('README','INSTALL','Changelog') as $file) {
+-        if(file_exists("./mods/$name/$file")){
++        if(file_exists(PHORUM_DIR."/mods/$name/$file")){
+             $moreinfo[] = "<a target=\"_blank\" href=\"".$PHORUM["http_path"]."/mods/$name/$file\">$file</a>";
+         }
+     }
+--- phorum-5.2.14/include/admin/modsettings.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/include/admin/modsettings.php	2010-01-13 22:40:38.894030607 +0200
+@@ -21,12 +21,12 @@
+ 
+     $mod = basename($_REQUEST["mod"]);
+ 
+-    if(file_exists("./mods/$mod/settings.php")){
++    if(file_exists(PHORUM_DIR."/mods/$mod/settings.php")){
+         if (!isset($PHORUM["mods"][$mod]) || !$PHORUM["mods"][$mod]) {
+             $text = "This module is not enabled yet. You can change its settings but the module is only active if you enable it on the previous page.";
+             phorum_admin_error($text);
+         }
+-        include_once("./mods/$mod/settings.php");
++        include_once(PHORUM_DIR."/mods/$mod/settings.php");
+ 
+     } else {
+ 
+--- phorum-5.2.14/include/admin/sanity_checks/modules_filenames.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/include/admin/sanity_checks/modules_filenames.php	2010-01-13 22:41:12.744027348 +0200
+@@ -29,7 +29,7 @@
+         }
+ 
+ 
+-        $d = dir("./mods");
++        $d = dir(PHORUM_DIR."/mods");
+         while (false !== ($entry = $d->read()))
+         {
+         	// Some entries which we skip by default.
+@@ -39,20 +39,20 @@
+         	
+         	// Read in the module information.
+         	$lines = array();
+-        	if (file_exists("./mods/$entry/info.txt")) {
+-        		$lines = file("./mods/$entry/info.txt");
++        	if (file_exists(PHORUM_DIR."/mods/$entry/info.txt")) {
++        		$lines = file(PHORUM_DIR."/mods/$entry/info.txt");
+         	} 
+         	
+-        	if(is_file("./mods/$entry") && substr($entry, -4)==".php") {
++        	if(is_file(PHORUM_DIR."/mods/$entry") && substr($entry, -4)==".php") {
+         		// one file module, skip it
+         	} else {
+-        		if(!file_exists("./mods/$entry/info.txt")) {
++        		if(!file_exists(PHORUM_DIR."/mods/$entry/info.txt")) {
+         			return array(
+                     PHORUM_SANITY_WARN,
+                     "Your module &quot;$entry&quot; doesn't have an info.txt file in its directory. Either its not a module or the installation of that module is broken.", 
+                     "You should remove all files or directories which are not modules from the mods-directory and fix broken module installations."
+                     );
+-        		} elseif (!file_exists("./mods/$entry/$entry.php")) {
++        		} elseif (!file_exists(PHORUM_DIR."/mods/$entry/$entry.php")) {
+         			return array(
+                     PHORUM_SANITY_WARN,
+                     "Your module &quot;$entry&quot; doesn't have an corresponding .php file in its directory. 
+--- phorum-5.2.14/mods/username_restrictions/settings.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/username_restrictions/settings.php	2010-01-13 22:41:43.609857184 +0200
+@@ -1,7 +1,7 @@
+ <?php
+     if (!defined("PHORUM_ADMIN")) return;
+ 
+-    include("./mods/username_restrictions/defaults.php");
++    include(PHORUM_DIR."/mods/username_restrictions/defaults.php");
+ 
+     // Options for the valid username characters.
+     $valid_chars_options = array(
+--- phorum-5.2.14/mods/bbcode/bbcode.php	2010-01-13 22:43:01.370682640 +0200
++++ phorum-5.2.14/mods/bbcode/bbcode.php	2010-01-13 22:48:35.809816117 +0200
+@@ -210,7 +210,7 @@
+         editor_tools_register_tool(
+             $id,                           // Tool id
+             $description,                  // Tool description
+-            "./mods/bbcode/icons/$id.gif", // Tool button icon
++            "mods/bbcode/icons/$id.gif", // Tool button icon
+             "editor_tools_handle_$id()"    // Javascript action on click
+         );
+     }
+@@ -285,10 +285,10 @@
+     if ($PHORUM["args"]["action"] == 'help')
+     {
+         $lang = $GLOBALS['PHORUM']['language'];
+-        if (!file_exists("./mods/bbcode/help/$lang/bbcode.php")) {
++        if (!file_exists(PHORUM_DIR."/mods/bbcode/help/$lang/bbcode.php")) {
+             $lang = 'english';
+         }
+-        include("./mods/bbcode/help/$lang/bbcode.php");
++        include(PHORUM_DIR."/mods/bbcode/help/$lang/bbcode.php");
+         exit(0);
+     }
+ 
+--- phorum-5.2.14/mods/event_logging/db.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/event_logging/db.php	2010-01-13 22:43:26.263180363 +0200
+@@ -30,7 +30,7 @@
+         $version++;
+         $settings = array( "mod_event_logging_installed" => $version );
+ 
+-        $sqlfile = "./mods/event_logging/db/" .
++        $sqlfile = PHORUM_DIR."/mods/event_logging/db/" .
+                    $PHORUM["DBCONFIG"]["type"] . "/$version.php";
+ 
+         if (! file_exists($sqlfile)) {
+--- phorum-5.2.14/mods/event_logging/settings.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/event_logging/settings.php	2010-01-13 22:43:46.897345026 +0200
+@@ -49,7 +49,7 @@
+ 
+ // Load the settings screen. For security,
+ // we follow a strict naming scheme here.
+-$settings_file = "./mods/event_logging/settings/{$action}.php";
++$settings_file = PHORUM_DIR."/mods/event_logging/settings/{$action}.php";
+ if (file_exists($settings_file)) {
+     include($settings_file);
+ } else {
+--- phorum-5.2.14/mods/smileys/help/english/smileys.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/smileys/help/english/smileys.php	2010-01-13 22:44:06.914009661 +0200
+@@ -29,7 +29,7 @@
+       <th class="PhorumAdminTableHead">Description</th>
+       <th class="PhorumAdminTableHead">Where</th>
+     </tr>
+-    <?php include("./mods/smileys/help/render_smileys_list.php") ?>
++    <?php include(PHORUM_DIR."/mods/smileys/help/render_smileys_list.php") ?>
+     </table>
+ 
+     <br/><br/><br/>
+--- phorum-5.2.14/mods/smileys/smileys.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/smileys/smileys.php	2010-01-13 22:44:30.416506930 +0200
+@@ -95,7 +95,7 @@
+         editor_tools_register_tool(
+             'smiley',                              // Tool id
+             $lang['smiley'],                       // Tool description
+-            "./mods/smileys/icon.gif",             // Tool button icon
++            "mods/smileys/icon.gif",             // Tool button icon
+             "editor_tools_handle_smiley()",        // Javascript click action
+             NULL,                                  // Tool icon width
+             NULL,                                  // Tool icon height
+@@ -109,7 +109,7 @@
+         editor_tools_register_tool(
+             'subjectsmiley',                       // Tool id
+             $lang['subjectsmiley'],                // Tool description
+-            "./mods/smileys/icon.gif",             // Tool button icon
++            "mods/smileys/icon.gif",             // Tool button icon
+             "editor_tools_handle_subjectsmiley()", // Javascript click action
+             NULL,                                  // Tool icon width
+             NULL,                                  // Tool icon height
+@@ -141,10 +141,10 @@
+     if ($PHORUM["args"]["action"] == 'help')
+     {
+         $lang = $GLOBALS['PHORUM']['language'];
+-        if (!file_exists("./mods/smileys/help/$lang/smileys.php")) {
++        if (!file_exists(PHORUM_DIR."/mods/smileys/help/$lang/smileys.php")) {
+             $lang = 'english';
+         }
+-        include("./mods/smileys/help/$lang/smileys.php");
++        include(PHORUM_DIR."/mods/smileys/help/$lang/smileys.php");
+         exit(0);
+     }
+ 
+--- phorum-5.2.14/mods/smileys/smileyslib.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/smileys/smileyslib.php	2010-01-13 22:44:58.696505207 +0200
+@@ -18,7 +18,7 @@
+ 
+ // The default smiley prefix path.
+ global $MOD_SMILEY_DEFAULT_PREFIX;
+-$MOD_SMILEY_DEFAULT_PREFIX = './mods/smileys/images/';
++$MOD_SMILEY_DEFAULT_PREFIX = 'mods/smileys/images/';
+ 
+ // The default list of smileys to install upon initial setup.
+ global $MOD_SMILEY_DEFAULT_SMILEYS;
+--- phorum-5.2.14/mods/spamhurdles/db.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/spamhurdles/db.php	2010-01-13 22:45:21.459835060 +0200
+@@ -17,7 +17,7 @@
+ {
+     global $PHORUM;
+ 
+-    $layerpath = "./mods/spamhurdles/db/{$PHORUM["DBCONFIG"]["type"]}";
++    $layerpath = PHORUM_DIR."/mods/spamhurdles/db/{$PHORUM["DBCONFIG"]["type"]}";
+ 
+     // Allow db layers to provide an initialization script of their own.
+     // The main goal for this script is to allow a db layer to override the
+--- phorum-5.2.14/mods/spamhurdles/spamhurdles.php~	2010-01-13 22:36:06.000000000 +0200
++++ phorum-5.2.14/mods/spamhurdles/spamhurdles.php	2010-01-13 22:45:36.219833260 +0200
+@@ -92,7 +92,7 @@
+     // If a spoken captcha is requested, then generate a wav file for it
+     // and stream it to the user.
+     if (isset($PHORUM["args"]["spokencaptcha"])) {
+-        include("./mods/spamhurdles/captcha/spoken_captcha.php");
++        include(PHORUM_DIR."/mods/spamhurdles/captcha/spoken_captcha.php");
+         exit(0);
+     }
+ 
