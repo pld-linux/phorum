@@ -1,9 +1,11 @@
+# TODO
+# - modules .css, .js, .jpg are not accessible from web
 %define		themever	5.2
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.33
+Release:	0.40
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -27,6 +29,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	%{_webapps}/%{_webapp}
 %define		_appdir		%{_datadir}/%{_webapp}
 %define		_phpdocdir	%{_docdir}/phpdoc
+%define		_cachedir	/var/cache/phorum
 
 %description
 Phorum is a web based message board written in PHP who's goal is to be
@@ -275,7 +278,7 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},/var/cache/phorum}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_cachedir}}
 cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
@@ -337,6 +340,30 @@ cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post theme-classic
+rm -f %{_cachedir}/tpl-classic-*
+
+%postun theme-classic
+if [ "$1" = 0 ]; then
+	rm -f %{_cachedir}/tpl-classic-*
+fi
+
+%post theme-emerald
+rm -f %{_cachedir}/tpl-emerald-*
+
+%postun theme-emerald
+if [ "$1" = 0 ]; then
+	rm -f %{_cachedir}/tpl-emerald-*
+fi
+
+%post theme-lightweight
+rm -f %{_cachedir}/tpl-lightweight-*
+
+%postun theme-lightweight
+if [ "$1" = 0 ]; then
+	rm -f %{_cachedir}/tpl-lightweight-*
+fi
 
 %post setup
 if [ "$1" = 1 ]; then
