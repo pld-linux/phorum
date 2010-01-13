@@ -3,7 +3,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.23
+Release:	0.26
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -25,6 +25,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_webapp		%{name}
 %define		_sysconfdir	%{_webapps}/%{_webapp}
 %define		_appdir		%{_datadir}/%{_webapp}
+%define		_phpdocdir	%{_docdir}/phpdoc
 
 %description
 Phorum is a web based message board written in PHP who's goal is to be
@@ -57,6 +58,18 @@ Ten pakiet należy zainstalować w celu wstępnej konfiguracji Phorum po
 pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
+%package phpdoc
+Summary:	Online manual for Phorum
+Summary(pl.UTF-8):	Dokumentacja online do Phorum
+Group:		Documentation
+Requires:	php-dirs
+
+%description phpdoc
+Documentation for Phorum.
+
+%description phpdoc -l pl.UTF-8
+Dokumentacja do Phorum.
+
 %package theme-classic
 Summary:    Classic theme for Phorum
 Group:      Applications/WWW
@@ -88,20 +101,27 @@ Lightweight theme for Phorum.
 %setup -q
 find '(' -name '*.php' -o -name '*.css' -o -name '*.js' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 
-# php-phpmailer
-rm -rf mods/smtp_mail/phpmailer
+install -d htdocs/admin examples
 
 # htaccess will be provided by apache.conf
 find -name .htaccess | xargs rm -v
 
+# php-phpmailer
+rm -rf mods/smtp_mail/phpmailer
+
 mv include/db/config.php.sample .
-mv include/api/examples docs/api_examples
+mv include/api/examples examples/api
+mv docs/example_mods examples/mods
+mv portable scripts examples
+# so we don't have to package html/pdf/docbook via docs/*
+mv docs/html htmldoc
+mv docs/docbook .
+mv docs/pdf pdfdoc
 
 # kill old files by phorum
 rm post.php
 
 # fixup structure, move public files to htdocs.
-install -d htdocs/admin
 mv *.php images htdocs
 
 # still private files (not for web)
@@ -110,9 +130,6 @@ mv htdocs/script.php .
 
 # admin css
 mv include/admin/css htdocs/admin
-
-# samples
-mv portable scripts docs
 
 # move themes images to htdocs
 for a in templates/*/images; do
@@ -158,6 +175,14 @@ cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
+
+# apidoc
+install -d $RPM_BUILD_ROOT%{_phpdocdir}/%{name}
+cp -a htmldoc/api/* $RPM_BUILD_ROOT%{_phpdocdir}/%{name}
+
+# examples
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -241,12 +266,18 @@ fi
 
 %dir %attr(770,root,http) /var/cache/phorum
 
+%{_examplesdir}/%{name}-%{version}
+
 %files setup
 %defattr(644,root,root,755)
 %{_appdir}/htdocs/admin
 %{_appdir}/htdocs/admin.php
 %{_appdir}/include/admin
 %{_appdir}/include/db/upgrade
+
+%files phpdoc
+%defattr(644,root,root,755)
+%{_phpdocdir}/%{name}
 
 %files theme-classic
 %defattr(644,root,root,755)
