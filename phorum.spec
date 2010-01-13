@@ -3,7 +3,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.31
+Release:	0.32
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -274,6 +274,52 @@ cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
 
+cat > langmap <<'EOF'
+cs czech
+cs czech-latin2
+cs czech-utf8
+cs czech-win1250
+da danish
+de german
+de german_sie
+nb norwegian
+es spanish_latin_american
+en english
+es spanish
+fi finnish
+fr french
+it italian
+nl dutch
+nl dutch_informal
+sv swedish
+tr turkish
+EOF
+for mod in mods/*/; do
+	mod=${mod%/} file=${mod#mods/}.lang
+	> $file
+	[ -f $mod/Changelog ] && echo %{_appdir}/$mod/Changelog >> $file
+	[ -f $mod/README ] && echo %{_appdir}/$mod/README >> $file
+	[ -f $mod/TODO ] && echo %{_appdir}/$mod/TODO >> $file
+	[ -f $mod/info.txt ] && echo %{_appdir}/$mod/info.txt >> $file
+	[ -f $mod/MANIFEST ] && echo %{_appdir}/$mod/MANIFEST >> $file
+	[ -d $mod/icons ] && echo %{_appdir}/$mod/icons >> $file
+	[ -d $mod/images ] && echo %{_appdir}/$mod/images >> $file
+	[ -d $mod/templates ] && echo %{_appdir}/$mod/templates >> $file
+	if [ -d $mod/lang ]; then
+		echo "%dir %{_appdir}/$mod/lang" >> $file
+		while read code lang; do
+			[ -f $mod/lang/$lang.php ] && echo "%lang($code) %{_appdir}/$mod/lang/$lang.php" >> $file
+		done < langmap
+	fi
+	if [ -d $mod/help ]; then
+		echo "%dir %{_appdir}/$mod/help" >> $file
+		while read code lang; do
+			[ -d $mod/help/$lang ] && echo "%lang($code) %{_appdir}/$mod/help/$lang" >> $file
+		done < langmap
+	fi
+	echo "%{_appdir}/$mod/*.php" >> $file
+done
+
 # apidoc
 install -d $RPM_BUILD_ROOT%{_phpdocdir}/%{name}
 cp -a htmldoc/api/* $RPM_BUILD_ROOT%{_phpdocdir}/%{name}
@@ -366,46 +412,6 @@ fi
 
 %{_examplesdir}/%{name}-%{version}
 
-%files mod-announcements
-%defattr(644,root,root,755)
-%{_appdir}/mods/announcements
-
-%files mod-bbcode
-%defattr(644,root,root,755)
-%{_appdir}/mods/bbcode
-
-%files mod-editor_tools
-%defattr(644,root,root,755)
-%{_appdir}/mods/editor_tools
-
-%files mod-event_logging
-%defattr(644,root,root,755)
-%{_appdir}/mods/event_logging
-
-%files mod-replace
-%defattr(644,root,root,755)
-%{_appdir}/mods/replace
-
-%files mod-smileys
-%defattr(644,root,root,755)
-%{_appdir}/mods/smileys
-
-%files mod-spamhurdles
-%defattr(644,root,root,755)
-%{_appdir}/mods/spamhurdles
-
-%files mod-tidy
-%defattr(644,root,root,755)
-%{_appdir}/mods/mod_tidy.php
-
-%files mod-username_restrictions
-%defattr(644,root,root,755)
-%{_appdir}/mods/username_restrictions
-
-%files mod-smtp_mail
-%defattr(644,root,root,755)
-%{_appdir}/mods/smtp_mail
-
 %files setup
 %defattr(644,root,root,755)
 %{_appdir}/htdocs/admin
@@ -417,6 +423,53 @@ fi
 %defattr(644,root,root,755)
 %{_phpdocdir}/%{name}
 
+%files mod-announcements -f announcements.lang
+%defattr(644,root,root,755)
+
+%files mod-bbcode -f bbcode.lang
+%defattr(644,root,root,755)
+%{_appdir}/mods/bbcode/colorpicker
+%{_appdir}/mods/bbcode/*.js
+%{_appdir}/mods/bbcode/help/*.css
+%{_appdir}/mods/bbcode/help/*.gif
+
+%files mod-editor_tools -f editor_tools.lang
+%defattr(644,root,root,755)
+%{_appdir}/mods/editor_tools/*.js
+%{_appdir}/mods/editor_tools/*.css
+
+%files mod-event_logging -f event_logging.lang
+%defattr(644,root,root,755)
+%{_appdir}/mods/event_logging/db
+%{_appdir}/mods/event_logging/settings
+
+%files mod-replace -f replace.lang
+%defattr(644,root,root,755)
+
+%files mod-smileys -f smileys.lang
+%defattr(644,root,root,755)
+%{_appdir}/mods/smileys/*.css
+%{_appdir}/mods/smileys/*.gif
+%{_appdir}/mods/smileys/help/*.css
+%{_appdir}/mods/smileys/help/*.php
+
+%files mod-spamhurdles -f spamhurdles.lang
+%defattr(644,root,root,755)
+%{_appdir}/mods/spamhurdles/captcha
+%{_appdir}/mods/spamhurdles/db
+%{_appdir}/mods/spamhurdles/lib
+%{_appdir}/mods/spamhurdles/*.css
+%{_appdir}/mods/spamhurdles/*.jpg
+
+%files mod-tidy
+%defattr(644,root,root,755)
+%{_appdir}/mods/mod_tidy.php
+
+%files mod-username_restrictions -f username_restrictions.lang
+%defattr(644,root,root,755)
+
+%files mod-smtp_mail -f smtp_mail.lang
+%defattr(644,root,root,755)
 
 %files theme-classic
 %defattr(644,root,root,755)
