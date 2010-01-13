@@ -582,3 +582,13 @@
          exit(0);
      }
  
+--- phorum/include/admin/forum_defaults.php~	2010-01-13 23:12:00.000000000 +0200
++++ phorum/include/admin/forum_defaults.php	2010-01-13 23:16:15.052984229 +0200
+@@ -21,6 +21,6 @@
+ 
+     define("PHORUM_DEFAULT_OPTIONS", 1);
+ 
+-    include "./include/admin/newforum.php";
++    require_once PHORUM_INCLUDES_DIR.'/admin/newforum.php';
+ 
+ ?>
