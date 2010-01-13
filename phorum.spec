@@ -3,7 +3,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.32
+Release:	0.33
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -13,6 +13,7 @@ Patch0:		paths.patch
 Patch1:		mysql.patch
 Patch2:		docsurl.patch
 Patch3:		sys-phpmailer.patch
+Patch4:		sys-recaptcha.patch
 URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	%{name}(theme) = %{themever}
@@ -141,6 +142,7 @@ This module allows users to add graphical smileys to their messages.
 Summary:	Phorum Spam Hurdle Module
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
+Requires:	php-recaptcha
 
 %description mod-spamhurdles
 This module sets up some hurdles for forum spammers. It implements
@@ -207,6 +209,10 @@ find -name .htaccess | xargs rm -v
 # php-phpmailer
 rm -rf mods/smtp_mail/phpmailer
 
+# php-recaptcha
+rm -rf mods/spamhurdles/captcha/recaptcha-php-1.9
+rm -f mods/spamhurdles/MANIFEST
+
 mv include/db/config.php.sample .
 mv include/api/examples examples/api
 mv docs/example_mods examples/mods
@@ -262,6 +268,7 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
