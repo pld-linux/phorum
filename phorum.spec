@@ -3,7 +3,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.26
+Release:	0.31
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -15,9 +15,9 @@ Patch2:		docsurl.patch
 Patch3:		sys-phpmailer.patch
 URL:		http://www.phorum.org/
 BuildRequires:	rpmbuild(macros) >= 1.268
+Requires:	%{name}(theme) = %{themever}
 Requires:	webapps
 Requires:	webserver(php) >= 4.3.0
-Requires:   %{name}(theme) = %{themever}
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -70,29 +70,127 @@ Documentation for Phorum.
 %description phpdoc -l pl.UTF-8
 Dokumentacja do Phorum.
 
+%package mod-announcements
+Summary:	Phorum Announcements module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-announcements
+Shows topics from one forum as announcements in a variety of ways.
+
+%package mod-bbcode
+Summary:	Phorum BBcode module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-bbcode
+This module allows users to add BBcode (Bulletin Board Code) tags to
+their postings. BBcode tags are a safe way of adding markup (bold,
+italic, images, links, etc.). Created by Phorum Dev Team
+
+%package mod-editor_tools
+Summary:	Phorum Editor tools module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-editor_tools
+This module will add a tool bar to the Phorum message editor, which
+can be used by visitors to easily add things like BBcode tags and
+smileys to their postings.
+
+%package mod-event_logging
+Summary:	Phorum Event Logging module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-event_logging
+This module implements an event logging system, which can be used for
+logging various events. Other modules can use this module for logging
+purposes too.
+
+%package mod-smtp_mail
+Summary:	Phorum Send mail through SMTP module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+Requires:	php-phpmailer >= 2.3
+
+%description mod-smtp_mail
+This module allows Phorum to send the email through an SMTP server
+instead of using PHP's mail() function.
+
+Some ISPs disable the mail() function, in which case this module is
+needed to send emails to users. Only use it if you need it.
+
+%package mod-replace
+Summary:	Phorum Simple Text Replacement Module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-replace
+This module allows admins to define text replacement in messages.
+
+%package mod-smileys
+Summary:	Phorum Smileys Module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-smileys
+This module allows users to add graphical smileys to their messages.
+
+%package mod-spamhurdles
+Summary:	Phorum Spam Hurdle Module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-spamhurdles
+This module sets up some hurdles for forum spammers. It implements
+both interactive (CAPTCHA) and non-interactive anti-spam methods to
+keep away spam bots. On the settings page, you can control exactly
+what hurdles to enable.
+
+%package mod-tidy
+Summary:	Phorum Tidy Output Module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-tidy
+This module removes unneeded white space from Phorum's output saving
+bandwidth.
+
+%package mod-username_restrictions
+Summary:	Phorum Username Restrictions Module
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description mod-username_restrictions
+This module implements configurable features for enforcing user name
+restrictions. The module will check the user name at registration time
+and show an error to the user if the new username does not meet the
+restrictions.
+
 %package theme-classic
-Summary:    Classic theme for Phorum
-Group:      Applications/WWW
-Requires:   %{name} = %{version}-%{release}
-Provides:   %{name}(theme) = %{themever}
+Summary:	Classic theme for Phorum
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}(theme) = %{themever}
 
 %description theme-classic
 Classic theme for Phorum.
 
 %package theme-emerald
-Summary:    Emerald theme for Phorum
-Group:      Applications/WWW
-Requires:   %{name} = %{version}-%{release}
-Provides:   %{name}(theme) = %{themever}
+Summary:	Emerald theme for Phorum
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}(theme) = %{themever}
 
 %description theme-emerald
 Emerald theme for Phorum.
 
 %package theme-lightweight
-Summary:    Lightweight theme for Phorum
-Group:      Applications/WWW
-Requires:   %{name} = %{version}-%{release}
-Provides:   %{name}(theme) = %{themever}
+Summary:	Lightweight theme for Phorum
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}(theme) = %{themever}
 
 %description theme-lightweight
 Lightweight theme for Phorum.
@@ -222,7 +320,7 @@ fi
 %{_appdir}/common.php
 %{_appdir}/script.php
 %{_appdir}/templates
-%{_appdir}/mods
+%dir %{_appdir}/mods
 
 %dir %{_appdir}/include
 %dir %{_appdir}/include/db
@@ -268,6 +366,46 @@ fi
 
 %{_examplesdir}/%{name}-%{version}
 
+%files mod-announcements
+%defattr(644,root,root,755)
+%{_appdir}/mods/announcements
+
+%files mod-bbcode
+%defattr(644,root,root,755)
+%{_appdir}/mods/bbcode
+
+%files mod-editor_tools
+%defattr(644,root,root,755)
+%{_appdir}/mods/editor_tools
+
+%files mod-event_logging
+%defattr(644,root,root,755)
+%{_appdir}/mods/event_logging
+
+%files mod-replace
+%defattr(644,root,root,755)
+%{_appdir}/mods/replace
+
+%files mod-smileys
+%defattr(644,root,root,755)
+%{_appdir}/mods/smileys
+
+%files mod-spamhurdles
+%defattr(644,root,root,755)
+%{_appdir}/mods/spamhurdles
+
+%files mod-tidy
+%defattr(644,root,root,755)
+%{_appdir}/mods/mod_tidy.php
+
+%files mod-username_restrictions
+%defattr(644,root,root,755)
+%{_appdir}/mods/username_restrictions
+
+%files mod-smtp_mail
+%defattr(644,root,root,755)
+%{_appdir}/mods/smtp_mail
+
 %files setup
 %defattr(644,root,root,755)
 %{_appdir}/htdocs/admin
@@ -278,6 +416,7 @@ fi
 %files phpdoc
 %defattr(644,root,root,755)
 %{_phpdocdir}/%{name}
+
 
 %files theme-classic
 %defattr(644,root,root,755)
