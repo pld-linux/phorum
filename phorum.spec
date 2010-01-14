@@ -1,11 +1,11 @@
 # TODO
-# - modules .css, .js, .jpg are not accessible from web
-%define		themever	5.2
+# - modules images are not accessible from web
+%define		mainver	5.2
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	%{themever}.14
-Release:	0.45
+Version:	%{mainver}.14
+Release:	0.47
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -23,7 +23,6 @@ Patch4:		sys-recaptcha.patch
 URL:		http://www.phorum.org/
 BuildRequires:	glibc-misc
 BuildRequires:	rpmbuild(macros) >= 1.268
-Requires:	%{name}(theme) = %{themever}
 Requires:	webapps
 Requires:	webserver(php) >= 4.3.0
 BuildArch:	noarch
@@ -178,32 +177,32 @@ restrictions. The module will check the user name at registration time
 and show an error to the user if the new username does not meet the
 restrictions.
 
-%package theme-classic
-Summary:	Classic theme for Phorum
+%package template-classic
+Summary:	Classic template for Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}(theme) = %{themever}
+Provides:	%{name}(template) = %{mainver}
 
-%description theme-classic
-Classic theme for Phorum.
+%description template-classic
+Classic template for Phorum.
 
-%package theme-emerald
-Summary:	Emerald theme for Phorum
+%package template-emerald
+Summary:	Emerald template for Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}(theme) = %{themever}
+Provides:	%{name}(template) = %{mainver}
 
-%description theme-emerald
-Emerald theme for Phorum.
+%description template-emerald
+Emerald template for Phorum.
 
-%package theme-lightweight
-Summary:	Lightweight theme for Phorum
+%package template-lightweight
+Summary:	Lightweight template for Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}(theme) = %{themever}
+Provides:	%{name}(template) = %{mainver}
 
-%description theme-lightweight
-Lightweight theme for Phorum.
+%description template-lightweight
+Lightweight template for Phorum.
 
 %prep
 %setup -q -a1 -a2
@@ -247,7 +246,7 @@ mv htdocs/script.php .
 # admin css
 mv include/admin/css htdocs/admin
 
-# move themes images to htdocs
+# move template images to htdocs
 for a in templates/*/images; do
 	d=$(dirname "$a");
 	install -d htdocs/$d
@@ -360,26 +359,26 @@ cp -a examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post theme-classic
+%post template-classic
 rm -f %{_cachedir}/tpl-classic-*
 
-%postun theme-classic
+%postun template-classic
 if [ "$1" = 0 ]; then
 	rm -f %{_cachedir}/tpl-classic-*
 fi
 
-%post theme-emerald
+%post template-emerald
 rm -f %{_cachedir}/tpl-emerald-*
 
-%postun theme-emerald
+%postun template-emerald
 if [ "$1" = 0 ]; then
 	rm -f %{_cachedir}/tpl-emerald-*
 fi
 
-%post theme-lightweight
+%post template-lightweight
 rm -f %{_cachedir}/tpl-lightweight-*
 
-%postun theme-lightweight
+%postun template-lightweight
 if [ "$1" = 0 ]; then
 	rm -f %{_cachedir}/tpl-lightweight-*
 fi
@@ -522,17 +521,17 @@ fi
 %files mod-smtp_mail -f smtp_mail.lang
 %defattr(644,root,root,755)
 
-%files theme-classic
+%files template-classic
 %defattr(644,root,root,755)
 %{_appdir}/templates/classic
 %{_appdir}/htdocs/templates/classic
 
-%files theme-emerald
+%files template-emerald
 %defattr(644,root,root,755)
 %{_appdir}/templates/emerald
 %{_appdir}/htdocs/templates/emerald
 
-%files theme-lightweight
+%files template-lightweight
 %defattr(644,root,root,755)
 %{_appdir}/templates/lightweight
 %{_appdir}/htdocs/templates/lightweight
