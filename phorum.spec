@@ -5,18 +5,23 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{themever}.14
-Release:	0.42
+Release:	0.45
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	944211b4f195a538bcb6e2883d2187c5
-Source1:	apache.conf
+Source1:	http://www.phorum.org/phorum5/file.php/download/65/2522/%{name}-estonian-5.2.7a.zip
+# Source1-md5:	cd2d5fb9b0b17da0d805209ac76b58d4
+Source2:	http://www.phorum.org/phorum5/file.php/65/4131/Russian-Utf8.zip
+# Source2-md5:	510e8b1750bebef99fdfdab3504ac60d
+Source3:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
 Patch2:		docsurl.patch
 Patch3:		sys-phpmailer.patch
 Patch4:		sys-recaptcha.patch
 URL:		http://www.phorum.org/
+BuildRequires:	glibc-misc
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	%{name}(theme) = %{themever}
 Requires:	webapps
@@ -201,7 +206,7 @@ Provides:	%{name}(theme) = %{themever}
 Lightweight theme for Phorum.
 
 %prep
-%setup -q
+%setup -q -a1 -a2
 find '(' -name '*.php' -o -name '*.css' -o -name '*.js' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 
 install -d htdocs/admin examples
@@ -224,6 +229,10 @@ mv portable scripts examples
 mv docs/html htmldoc
 mv docs/docbook .
 mv docs/pdf pdfdoc
+
+mv russian.php include/lang
+iconv -fcp1251 -tutf8 'readme!!!.txt' > docs/README.ru
+rm -f 'readme!!!.txt'
 
 # kill old files by phorum
 rm post.php
@@ -280,8 +289,8 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_cachedir}}
 cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
-cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
 
 cat > langmap <<'EOF'
@@ -292,18 +301,28 @@ cs czech-win1250
 da danish
 de german
 de german_sie
-nb norwegian
-es spanish_latin_american
 en english
 es spanish
+es spanish_latin_american
+et estonian
 fi finnish
 fr french
 it italian
+nb norwegian
 nl dutch
 nl dutch_informal
+ru russian
 sv swedish
 tr turkish
 EOF
+
+rm -f *.lang
+
+echo "%dir %{_appdir}/include/lang" >> %{name}.lang
+while read code lang; do
+	[ -f include/lang/$lang.php ] && echo "%lang($code) %{_appdir}/include/lang/$lang.php" >> %{name}.lang
+done < langmap
+
 for mod in mods/*/; do
 	mod=${mod%/} file=${mod#mods/}.lang
 	> $file
@@ -388,7 +407,7 @@ fi
 %triggerun -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc docs/*
 %dir %attr(750,root,http) %{_sysconfdir}
@@ -407,7 +426,6 @@ fi
 %{_appdir}/include/db/mysql.php
 %{_appdir}/include/*.php
 %{_appdir}/include/controlcenter
-%{_appdir}/include/lang
 %{_appdir}/include/posting
 %{_appdir}/include/ajax
 %{_appdir}/include/api
