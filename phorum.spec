@@ -5,7 +5,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.14
-Release:	0.47
+Release:	0.48
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2

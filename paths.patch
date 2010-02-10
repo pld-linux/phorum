@@ -592,3 +592,14 @@
 +    require_once PHORUM_INCLUDES_DIR.'/admin/newforum.php';
  
  ?>
+--- phorum/include/admin/editforum.php~	2010-01-14 12:34:47.000000000 +0200
++++ phorum/include/admin/editforum.php	2010-01-14 12:34:48.878192205 +0200
+@@ -24,7 +24,7 @@
+     if(empty($_REQUEST["forum_id"])){
+         phorum_admin_error("forum_id not set");
+     } else {
+-        include "./include/admin/newforum.php";
++        include PHORUM_INCLUDES_DIR."/admin/newforum.php";
+     }
+ 
+ ?>
