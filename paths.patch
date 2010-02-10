@@ -162,8 +162,8 @@
      return;
  }
  
---- phorum/include/admin/header.php~	2009-07-22 14:58:57.000000000 +0300
-+++ phorum/include/admin/header.php	2010-01-06 20:02:05.938378394 +0200
+--- phorum/include/admin/header.php	2010-01-06 20:02:05.938378394 +0200
++++ phorum/include/admin/header.php	2010-02-10 17:52:51.032840427 +0200
 @@ -36,7 +36,7 @@
  
      // set the path to the CSS file to pull in
@@ -207,8 +207,8 @@
      background-position: 5px 5px;
      background-repeat: no-repeat;
      font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica;
---- phorum-5.2.14/include/admin/cache.php~	2010-01-11 16:30:31.000000000 +0200
-+++ phorum-5.2.14/include/admin/cache.php	2010-01-11 16:58:45.262528168 +0200
+--- phorum-5.2.14/include/admin/cache.php	2010-01-11 16:58:45.262528168 +0200
++++ phorum/include/admin/cache.php	2010-02-10 17:53:45.066588504 +0200
 @@ -32,7 +32,7 @@
              case "cache":
  
@@ -218,6 +218,15 @@
                  } elseif ( !file_exists( $value ) ) {
                      $error = "This cache directory does not exist.  Please create it with the proper permissions.";
                  } else {
+@@ -45,7 +45,7 @@
+ 
+                 if ( empty( $value ) ) {
+                     $new_settings[$field] = "file";
+-                } elseif ( !file_exists( './include/cache/'.$value.'.php' ) ) {
++                } elseif ( !file_exists( PHORUM_INCLUDES_DIR.'/cache/'.$value.'.php' ) ) {
+                     $error = "This cache layer ($value) does not exist.";
+                 } else {
+                     $new_settings[$field] = $value;
 --- phorum/include/db/mysql.php~	2010-01-12 18:38:55.000000000 +0200
 +++ phorum/include/db/mysql.php	2010-01-12 18:42:08.086600820 +0200
 @@ -7636,7 +7636,7 @@
@@ -290,10 +299,14 @@
                  $add .= ob_get_contents();
                  ob_end_clean();
                  break;
---- phorum/include/admin/header.php~	2010-01-13 19:03:16.000000000 +0200
-+++ phorum/include/admin/header.php	2010-01-13 21:30:22.607156616 +0200
-@@ -25,7 +25,7 @@
-         if (!file_exists("./include/lang/${lang}.php")) {
+--- phorum/include/admin/header.php	2010-01-13 21:30:22.607156616 +0200
++++ phorum/include/admin/header.php	2010-02-10 17:52:51.032840427 +0200
+@@ -22,10 +22,10 @@
+     // load the default Phorum language
+     if(isset($PHORUM["default_forum_options"]["language"])){
+         $lang = basename($PHORUM["default_forum_options"]["language"]);
+-        if (!file_exists("./include/lang/${lang}.php")) {
++        if (!file_exists(PHORUM_INCLUDES_DIR."/lang/${lang}.php")) {
              $lang = PHORUM_DEFAULT_LANGUAGE;
          }
 -        require_once PHORUM_INCLUDES_DIR.'/lang/{$lang}.php';
@@ -372,8 +385,17 @@
              if (file_exists($info)) {
                  $time = @filemtime($info);
              } elseif (file_exists($filemod)) {
---- phorum-5.2.14/include/admin/manage_languages.php~	2010-01-13 22:36:06.000000000 +0200
-+++ phorum-5.2.14/include/admin/manage_languages.php	2010-01-13 22:39:37.387371140 +0200
+--- phorum-5.2.14/include/admin/manage_languages.php	2010-01-13 22:39:37.387371140 +0200
++++ phorum/include/admin/manage_languages.php	2010-02-10 17:53:07.802834990 +0200
+@@ -529,7 +529,7 @@
+ // PHP code would be interpreted.
+ function phorum_get_language($lang)
+ {
+-    $path = "./include/lang/$lang.php";
++    $path = PHORUM_INCLUDES_DIR."/lang/$lang.php";
+     $PHORUM = array();
+     $DEPRECATED = array();
+     $keep_comment = '';
 @@ -665,7 +665,7 @@
  
      // For the announcement module, we keep the language strings in
@@ -614,3 +636,126 @@
  
  // Mapping of status to display representation.
  $status2display = array(
+--- phorum/./common.php~	2010-02-10 17:45:45.000000000 +0200
++++ phorum/./common.php	2010-02-10 17:49:57.546277613 +0200
+@@ -130,7 +130,7 @@
+ // layer, but people might still be using "mysqli" as their configured
+ // database type.
+ if ($PHORUM["DBCONFIG"]["type"] == "mysqli" &&
+-    !file_exists("./include/db/mysqli.php")) {
++    !file_exists(PHORUM_INCLUDES_DIR.'/db/mysqli.php')) {
+     $PHORUM["DBCONFIG"]["type"] = "mysql";
+ }
+ 
+--- phorum/./htdocs/control.php~	2010-02-10 17:40:57.000000000 +0200
++++ phorum/./htdocs/control.php	2010-02-10 17:50:30.492841807 +0200
+@@ -216,10 +216,10 @@
+ // If no module did handle the control center panel, then try to load
+ // a standard control center panel file.
+ if (!$hook_info['handled']) {
+-    if (file_exists("./include/controlcenter/$panel.php")) {
+-        include "./include/controlcenter/$panel.php";
++    if (file_exists(PHORUM_INCLUDES_DIR."/controlcenter/$panel.php")) {
++        include PHORUM_INCLUDES_DIR."/controlcenter/$panel.php";
+     } else {
+-        include "./include/controlcenter/summary.php";
++        include PHORUM_INCLUDES_DIR."/controlcenter/summary.php";
+     }
+ }
+ 
+--- phorum/include/db/upgrade/mysql-patches/2007100802.php~	2010-02-10 17:40:56.000000000 +0200
++++ phorum/include/db/upgrade/mysql-patches/2007100802.php	2010-02-10 17:51:09.532835324 +0200
+@@ -1,6 +1,6 @@
+ <?php
+ 
+-include './include/thread_info.php';
++include PHORUM_INCLUDES_DIR.'/include/thread_info.php';
+ 
+ if (! ini_get('safe_mode')) {
+     set_time_limit(0);
+--- phorum/include/email_functions.php~	2010-02-10 17:40:56.000000000 +0200
++++ phorum/include/email_functions.php	2010-02-10 17:51:44.349708234 +0200
+@@ -297,12 +297,12 @@
+ 
+         $language = basename($language); 
+ 
+-        if ( file_exists( "./include/lang/$language.php" ) ) {
++        if ( file_exists( PHORUM_INCLUDES_DIR."/lang/$language.php" ) ) {
+             $mail_data['language'] = $language;
+-            include( "./include/lang/$language.php" );
++            include( PHORUM_INCLUDES_DIR."/lang/$language.php" );
+         } else {
+             $mail_data['language'] = $PHORUM['language'];
+-            include("./include/lang/{$PHORUM['language']}.php");
++            include(PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php");
+         }
+ 
+         $mail_data["mailmessage"] = $PHORUM["DATA"]["LANG"]['PMNotifyMessage'];
+@@ -363,12 +363,12 @@
+         {
+             $language = basename($language);
+ 
+-            if ( file_exists( "./include/lang/$language.php" ) ) {
++            if ( file_exists( PHORUM_INCLUDES_DIR."/lang/$language.php" ) ) {
+                 $mail_data['language'] = $language;
+-                include( "./include/lang/$language.php" );
++                include( PHORUM_INCLUDES_DIR."/lang/$language.php" );
+             } else {
+                 $mail_data['language'] = $PHORUM['language'];
+-                include("./include/lang/{$PHORUM['language']}.php");
++                include(PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php");
+             }
+             $mail_data["mailmessage"] = $PHORUM["DATA"]["LANG"]['NewReplyMessage'];
+             $mail_data["mailsubject"] = $PHORUM["DATA"]["LANG"]['NewReplySubject'];
+--- phorum/include/version_functions.php~	2010-02-10 17:40:56.000000000 +0200
++++ phorum/include/version_functions.php	2010-02-10 17:52:06.272846172 +0200
+@@ -277,7 +277,7 @@
+     foreach (array('patch', 'schema') as $type)
+     {
+         $upgradepath =
+-            "./include/db/upgrade/$core_type" .
++            PHORUM_INCLUDES_DIR."/db/upgrade/$core_type" .
+             ($type == 'patch' ? '-patches' : '');
+ 
+         $curversion = $type == 'patch'
+--- phorum/include/admin/deletefolder.php~	2010-02-10 17:40:56.000000000 +0200
++++ phorum/include/admin/deletefolder.php	2010-02-10 17:52:20.976213961 +0200
+@@ -19,6 +19,6 @@
+ 
+     if(!defined("PHORUM_ADMIN")) return;
+ 
+-    include("./include/admin/deleteforum.php");
++    include(PHORUM_INCLUDES_DIR."/admin/deleteforum.php");
+ 
+ ?>
+--- phorum/include/admin/editfolder.php~	2010-02-10 17:40:56.000000000 +0200
++++ phorum/include/admin/editfolder.php	2010-02-10 17:52:31.752844609 +0200
+@@ -24,7 +24,7 @@
+     if(empty($_REQUEST["forum_id"])){
+         phorum_admin_error("forum_id not set");
+     } else {
+-        include "./include/admin/newfolder.php";
++        include PHORUM_INCLUDES_DIR."/admin/newfolder.php";
+     }
+ 
+ ?>
+--- phorum/include/admin/sanity_checks/language.php~	2010-02-10 17:40:56.000000000 +0200
++++ phorum/include/admin/sanity_checks/language.php	2010-02-10 17:53:23.076164071 +0200
+@@ -28,7 +28,7 @@
+         $checked = array();
+ 
+         // Check for the default language file.
+-        if (! file_exists("./include/lang/{$PHORUM["default_forum_options"]["language"]}.php")) return array(
++        if (! file_exists(PHORUM_INCLUDES_DIR."/lang/{$PHORUM["default_forum_options"]["language"]}.php")) return array(
+             PHORUM_SANITY_WARN,
+             "Your default language is set to
+              \"".htmlspecialchars($PHORUM["default_forum_options"]["language"])."\",
+@@ -48,7 +48,7 @@
+         $forums = phorum_db_get_forums();
+         foreach ($forums as $id => $forum) {
+             if (!empty($forum["language"]) && !$checked[$forum["language"]] &&
+-                !file_exists("./include/lang/{$forum["language"]}.php")) {
++                !file_exists(PHORUM_INCLUDES_DIR."/lang/{$forum["language"]}.php")) {
+                 return array(
+                   PHORUM_SANITY_WARN,
+                   "The language for forum \"".
