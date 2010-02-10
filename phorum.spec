@@ -26,7 +26,10 @@ Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
 URL:		http://www.phorum.org/
 BuildRequires:	glibc-misc
+BuildRequires:	iconv
+BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	unzip
 Requires:	%{name}(DB_Provider)
 Requires:	php-date
 Requires:	php-gd
