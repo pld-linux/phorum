@@ -1,11 +1,13 @@
 # TODO
 # - modules images are not accessible from web
 %define		mainver	5.2
+%include	/usr/lib/rpm/macros.php
+%define		php_min_version 5.0.0
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.14
-Release:	0.49
+Release:	0.53
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -23,14 +25,26 @@ Patch4:		sys-recaptcha.patch
 URL:		http://www.phorum.org/
 BuildRequires:	glibc-misc
 BuildRequires:	rpmbuild(macros) >= 1.268
+Requires:	%{name}(DB_Provider)
+Requires:	php-date
+Requires:	php-gd
+Requires:	php-pcre
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
-Requires:	webserver(php) >= 4.3.0
-Suggests:	php-mysql
-Suggests:	php-mysqli
+Requires:	webserver(php) >= %{php_min_version}
+Suggests:	php-mbstring
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# no pear deps
+%define		_noautopear	pear
+
+# exclude optional php dependencies
+%define		_noautophp	php-mbstring
+
+# put it together for rpmbuild
+%define		_noautoreq	%{?_noautophp} %{?_noautopear}
 
 %define		_webapps	/etc/webapps
 %define		_webapp		%{name}
@@ -81,6 +95,26 @@ Documentation for Phorum.
 
 %description phpdoc -l pl.UTF-8
 Dokumentacja do Phorum.
+
+%package db-mysql
+Summary:	Phorum MySQL Backend: mysql
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+Requires:	php-mysql
+Provides:	%{name}(DB_Provider)
+
+%description db-mysql
+Phorum MySQL Database backend via mysql PHP extension.
+
+%package db-mysqli
+Summary:	Phorum MySQL Backend: mysqli
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+Requires:	php-mysqli
+Provides:	%{name}(DB_Provider)
+
+%description db-mysqli
+Phorum MySQL Database backend via mysqli PHP extension.
 
 %package mod-announcements
 Summary:	Phorum Announcements module
@@ -426,8 +460,11 @@ fi
 
 %dir %{_appdir}/include
 %dir %{_appdir}/include/db
-%{_appdir}/include/db/mysql
+
+# yes, base mysql code in main package as both mysql/mysqli use it
+%dir %{_appdir}/include/db/mysql
 %{_appdir}/include/db/mysql.php
+
 %{_appdir}/include/*.php
 %{_appdir}/include/controlcenter
 %{_appdir}/include/posting
@@ -477,6 +514,15 @@ fi
 %files phpdoc
 %defattr(644,root,root,755)
 %{_phpdocdir}/%{name}
+
+%files db-mysql
+%defattr(644,root,root,755)
+%{_appdir}/include/db/mysql/mysql.php
+
+%files db-mysqli
+%defattr(644,root,root,755)
+%{_appdir}/include/db/mysql/mysqli.php
+%{_appdir}/include/db/mysql/mysqli_replication.php
 
 %files mod-announcements -f announcements.lang
 %defattr(644,root,root,755)
