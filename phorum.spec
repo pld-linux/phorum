@@ -7,7 +7,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.14
-Release:	0.53
+Release:	0.57
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -22,18 +22,21 @@ Patch1:		mysql.patch
 Patch2:		docsurl.patch
 Patch3:		sys-phpmailer.patch
 Patch4:		sys-recaptcha.patch
+Patch5:		enable-mbstring.patch
+Patch6:		no-pear-json.patch
 URL:		http://www.phorum.org/
 BuildRequires:	glibc-misc
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	%{name}(DB_Provider)
 Requires:	php-date
 Requires:	php-gd
+Requires:	php-json
+Requires:	php-mbstring
 Requires:	php-pcre
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
 Requires:	webserver(php) >= %{php_min_version}
-Suggests:	php-mbstring
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -41,7 +44,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautopear	pear
 
 # exclude optional php dependencies
-%define		_noautophp	php-mbstring
+%define		_noautophp	%{nil}
 
 # put it together for rpmbuild
 %define		_noautoreq	%{?_noautophp} %{?_noautopear}
@@ -258,6 +261,9 @@ rm -rf mods/smtp_mail/phpmailer
 rm -rf mods/spamhurdles/captcha/recaptcha-php-1.9
 rm -f mods/spamhurdles/MANIFEST
 
+# php-json
+rm -f include/api/json-pear.php
+
 mv include/db/config.php.sample .
 mv include/api/examples examples/api
 mv docs/example_mods examples/mods
@@ -318,6 +324,8 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
