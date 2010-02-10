@@ -603,3 +603,14 @@
      }
  
  ?>
+--- phorum/include/admin/sanity_checks.php~	2010-02-10 17:19:10.000000000 +0200
++++ phorum/include/admin/sanity_checks.php	2010-02-10 17:33:03.766530721 +0200
+@@ -20,7 +20,7 @@
+ if(!defined("PHORUM")) return;
+ 
+ // The place where our sanity checking modules are.
+-$sanity_checks_dir = "./include/admin/sanity_checks";
++$sanity_checks_dir = PHORUM_INCLUDES_DIR."/admin/sanity_checks";
+ 
+ // Mapping of status to display representation.
+ $status2display = array(
