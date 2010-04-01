@@ -12,8 +12,10 @@ License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	e1a0a3974fc60ced71c95d282e7bcc3e
+# Source1Download: http://www.phorum.org/phorum5/read.php?65,129182
 Source1:	http://www.phorum.org/phorum5/file.php/download/65/2522/%{name}-estonian-5.2.7a.zip
 # Source1-md5:	cd2d5fb9b0b17da0d805209ac76b58d4
+# Source2Download: http://www.phorum.org/phorum5/read.php?65,142430,142430
 Source2:	http://www.phorum.org/phorum5/file.php/65/4131/Russian-Utf8.zip
 # Source2-md5:	510e8b1750bebef99fdfdab3504ac60d
 Source3:	apache.conf
