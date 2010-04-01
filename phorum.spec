@@ -1,5 +1,5 @@
 # TODO
-# - modules images are not accessible from web
+# - module images are not accessible from web
 %define		mainver	5.2
 %include	/usr/lib/rpm/macros.php
 %define		php_min_version 5.0.0
@@ -7,7 +7,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.14
-Release:	0.61
+Release:	0.62
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2

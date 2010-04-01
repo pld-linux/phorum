@@ -602,8 +602,8 @@
  
      // Allow db layers to provide an initialization script of their own.
      // The main goal for this script is to allow a db layer to override the
---- phorum-5.2.14/mods/spamhurdles/spamhurdles.php~	2010-01-13 22:36:06.000000000 +0200
-+++ phorum-5.2.14/mods/spamhurdles/spamhurdles.php	2010-01-13 22:45:36.219833260 +0200
+--- phorum-5.2.14/mods/spamhurdles/spamhurdles.php	2010-01-13 22:45:36.219833260 +0200
++++ phorum/mods/spamhurdles/spamhurdles.php	2010-03-29 19:52:17.206811507 +0300
 @@ -92,7 +92,7 @@
      // If a spoken captcha is requested, then generate a wav file for it
      // and stream it to the user.
@@ -613,6 +613,33 @@
          exit(0);
      }
  
+@@ -104,7 +104,7 @@
+             isset($PHORUM["SPAMHURDLES"]["captcha_class"])) {
+             $question = $PHORUM["SPAMHURDLES"]["captcha"]["question"];
+             $class = $PHORUM["SPAMHURDLES"]["captcha_class"];
+-            require_once PHORUM_DIR.'/mods/spamhurdles/captcha/class.{$class}.php';
++            require_once PHORUM_DIR."/mods/spamhurdles/captcha/class.{$class}.php";
+             $captcha = new $class();
+             $captcha->generate_image($question);
+             exit(0);
+@@ -170,7 +170,7 @@
+         ($type == "external_captcha")) ) {
+ 
+         $class = "captcha_" . $conf["captcha_type"];
+-        require_once PHORUM_DIR.'/mods/spamhurdles/captcha/class.{$class}.php';
++        require_once PHORUM_DIR."/mods/spamhurdles/captcha/class.{$class}.php";
+         $captcha = new $class();
+         $captcha = $captcha->generate_captcha();
+         $PHORUM["SPAMHURDLES"]["captcha_class"] = $class;
+@@ -423,7 +423,7 @@
+     // Check if the captcha is filled in right.
+     if (!$do_block && isset($spamhurdles["captcha"])) {
+         $class = $spamhurdles["captcha_class"];
+-        require_once PHORUM_DIR.'/mods/spamhurdles/captcha/class.{$class}.php';
++        require_once PHORUM_DIR."/mods/spamhurdles/captcha/class.{$class}.php";
+         $captcha = new $class();
+         $error = $captcha->check_answer($spamhurdles["captcha"]);
+         if ($error) {
 --- phorum/include/admin/forum_defaults.php~	2010-01-13 23:12:00.000000000 +0200
 +++ phorum/include/admin/forum_defaults.php	2010-01-13 23:16:15.052984229 +0200
 @@ -21,6 +21,6 @@
