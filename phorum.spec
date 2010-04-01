@@ -6,12 +6,12 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	%{mainver}.14
+Version:	%{mainver}.15a
 Release:	0.62
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	944211b4f195a538bcb6e2883d2187c5
+# Source0-md5:	e1a0a3974fc60ced71c95d282e7bcc3e
 Source1:	http://www.phorum.org/phorum5/file.php/download/65/2522/%{name}-estonian-5.2.7a.zip
 # Source1-md5:	cd2d5fb9b0b17da0d805209ac76b58d4
 Source2:	http://www.phorum.org/phorum5/file.php/65/4131/Russian-Utf8.zip
@@ -28,7 +28,8 @@ URL:		http://www.phorum.org/
 BuildRequires:	glibc-misc
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.533
+BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
 Requires:	%{name}(DB_Provider)
 #Requires:	php-date
@@ -251,7 +252,7 @@ Lightweight template for Phorum.
 
 %prep
 %setup -q -a1 -a2
-find '(' -name '*.php' -o -name '*.css' -o -name '*.js' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+find '(' -name '*.php' -o -name '*.css' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %undos
 
 install -d htdocs/admin examples
 

@@ -293,6 +293,25 @@
                  include($path);
                  $content .= ob_get_contents();
                  ob_end_clean();
+--- phorum-5.2.15a/htdocs/javascript.php~	2010-04-01 16:25:23.000000000 +0300
++++ phorum-5.2.15a/htdocs/javascript.php	2010-04-01 16:39:30.384965963 +0300
+@@ -31,14 +31,14 @@
+ $module_registrations[] = array(
+     'module'    => 'core',
+     'source'    => 'file(include/ajax/json2.js.php)',
+-    'cache_key' => filemtime('./include/ajax/json2.js.php')
++    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/ajax/json2.js.php')
+ );
+ 
+ // Add core Phorum posting form object manipulation client JavaScript code.
+ $module_registrations[] = array(
+     'module'    => 'core',
+     'source'    => 'file(include/posting/form_objects.js.php)',
+-    'cache_key' => filemtime('./include/posting/form_objects.js.php')
++    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/posting/form_objects.js.php')
+ );
+ 
+ 
 --- phorum/htdocs/css.php~	2010-01-12 19:27:06.000000000 +0200
 +++ phorum/htdocs/css.php	2010-01-12 19:30:47.253394705 +0200
 @@ -274,7 +274,11 @@
