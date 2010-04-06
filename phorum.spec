@@ -27,7 +27,6 @@ Patch4:		sys-recaptcha.patch
 Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
 URL:		http://www.phorum.org/
-BuildRequires:	glibc-misc
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.533
@@ -82,7 +81,7 @@ dodatkiem do każdej witryny.
 Summary:	Administrative Interface for Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	%{name}-setup
+Obsoletes:	phorum-setup
 
 %description admin
 This package contains Administrative interface for Phorum.
