@@ -1,5 +1,5 @@
 # TODO
-# - module images are not accessible from web
+# - module images are not accessible from web (checkme?)
 %define		mainver	5.2
 %include	/usr/lib/rpm/macros.php
 %define		php_min_version 5.0.0
@@ -7,7 +7,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.15a
-Release:	0.63
+Release:	0.67
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -51,7 +51,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautopear	pear
 
 # exclude optional php dependencies
-%define		_noautophp	%{nil}
+%define		_noautophp	php-date php-tokenizer
 
 # put it together for rpmbuild
 %define		_noautoreq	%{?_noautophp} %{?_noautopear}
@@ -78,21 +78,14 @@ instalacja, możliwość łatwego dostosowania do indywidualnych potrzeb
 oraz integracja z listami dyskusyjnymi czynią Phorum atrakcyjnym
 dodatkiem do każdej witryny.
 
-%package setup
-Summary:	Phorum setup package
-Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji Phorum
+%package admin
+Summary:	Administrative Interface for Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	%{name}-setup
 
-%description setup
-Install this package to configure initial Phorum installation. You
-should uninstall this package when you're done, as it considered
-insecure to keep the setup files in place.
-
-%description setup -l pl.UTF-8
-Ten pakiet należy zainstalować w celu wstępnej konfiguracji Phorum po
-pierwszej instalacji. Potem należy go odinstalować, jako że
-pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
+%description admin
+This package contains Administrative interface for Phorum.
 
 %package phpdoc
 Summary:	Online manual for Phorum
@@ -437,10 +430,10 @@ if [ "$1" = 0 ]; then
 	rm -f %{_cachedir}/tpl-lightweight-*
 fi
 
-%post setup
+%post admin
 if [ "$1" = 1 ]; then
 	%banner -e %{name} <<-EOF
-	Setup is simple as:
+	Initial Phorum setup is simple as:
 	1. creating mysql database:
 	mysqladmin create phorum5
 	2. granting privs and editing %{_sysconfdir}/config.php
@@ -520,7 +513,7 @@ fi
 
 %{_examplesdir}/%{name}-%{version}
 
-%files setup
+%files admin
 %defattr(644,root,root,755)
 %{_appdir}/htdocs/admin
 %{_appdir}/htdocs/admin.php
