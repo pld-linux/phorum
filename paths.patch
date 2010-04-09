@@ -724,7 +724,7 @@
  <?php
  
 -include './include/thread_info.php';
-+include PHORUM_INCLUDES_DIR.'/include/thread_info.php';
++include PHORUM_INCLUDES_DIR.'/thread_info.php';
  
  if (! ini_get('safe_mode')) {
      set_time_limit(0);
@@ -1060,3 +1060,15 @@
          if (! $dir) return array(
              PHORUM_SANITY_CRIT,
              "Phorum is unable to open the directory \"include/lang/\". This
+--- phorum-5.2.15a/htdocs/follow.php~	2010-04-09 17:49:12.000000000 +0300
++++ phorum-5.2.15a/htdocs/follow.php	2010-04-09 17:56:52.883300409 +0300
+@@ -78,7 +78,8 @@
+ } else {
+     // we are following a new thread
+ 
+-    require_once("include/format_functions.php");
++    require_once PHORUM_INCLUDES_DIR.'/format_functions.php';
++
+     $messages = phorum_format_messages(array(1=>$message));
+     $message = $messages[1];
+ 
