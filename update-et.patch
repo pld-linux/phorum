@@ -1,0 +1,27 @@
+--- phorum-5.2.15a/include/lang/estonian.php	2010-04-09 17:43:07.778808264 +0300
++++ phorum-5.2.15a/include/lang/estonian.php	2010-04-09 17:39:06.402148891 +0300
+@@ -18,14 +18,10 @@
+ // Date formatting. Check the PHP-docs for the syntax of these
+ // entries (http://www.php.net/strftime). One tip: do not use
+ // %T for showing the time zone, as users can change their time zone.
+-$PHORUM['long_date_time'] = iconv('ISO-8859-1', 'UTF-8',"%d. %B %Y, kl %H.%M");
+-$PHORUM['short_date_time'] = iconv('ISO-8859-1', 'UTF-8', "%d.%m.%Y %H.%M");
+-$PHORUM['long_date'] = iconv('ISO-8859-1', 'UTF-8', "%d. %B %Y");
+-$PHORUM['short_date'] = iconv('ISO-8859-1', 'UTF-8', "%d.%m.%Y");
+-//$PHORUM['long_date_time'] = utf8_encode("%B %d, %Y %I:%M%p");
+-//$PHORUM['short_date_time'] = utf8_encode("%m/%d/%Y %I:%M%p");
+-//$PHORUM['long_date'] = utf8_encode("%B %d, %Y");
+-//$PHORUM['short_date'] = utf8_encode("%m/%d/%Y");
++$PHORUM['long_date_time'] = "%d. %B %Y, kl %H.%M";
++$PHORUM['short_date_time'] = "%d.%m.%Y %H.%M";
++$PHORUM['long_date'] = "%d. %B %Y";
++$PHORUM['short_date'] = "%d.%m.%Y";
+ 
+ // The locale setting for enabling localized times/dates. Take a look
+ // at http://www.w3.org/WAI/ER/IG/ert/iso639.htm for the needed string.
+@@ -576,5 +572,3 @@
+       '11' => "(GMT + 11:00 hours) Magadan, New Caledonia, Solomon Islands",
+       '12' => "(GMT + 12:00 hours) Auckland, Wellington, Fiji, Marshall Island",
+ );
+-
+-?>
