@@ -26,6 +26,7 @@ Patch3:		sys-phpmailer.patch
 Patch4:		sys-recaptcha.patch
 Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
+Patch7:		update-et.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
@@ -325,6 +326,7 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
