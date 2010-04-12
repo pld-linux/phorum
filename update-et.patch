@@ -1,5 +1,5 @@
---- phorum-5.2.15a/include/lang/estonian.php	2010-04-09 17:39:06.402148891 +0300
-+++ phorum-5.2.15a/include/lang/estonian.php	2010-04-12 10:20:13.000000000 +0300
+--- phorum-5.2.15a/include/lang/estonian.php	2010-04-12 10:20:13.000000000 +0300
++++ phorum-5.2.15a/include/lang/estonian.php	2010-04-12 16:45:47.493235036 +0300
 @@ -18,14 +18,10 @@
  // Date formatting. Check the PHP-docs for the syntax of these
  // entries (http://www.php.net/strftime). One tip: do not use
@@ -39,7 +39,7 @@
      'Advanced' => "Täpsem otsing",
 -    'AllDates' => "Terve igavik",
 -    'AllNotShown' => "kõiki varjatud sõnumeid",
-+	'AllDates' => "Ilma piiranguta",
++    'AllDates' => "Ilma piiranguta",
 +    'AllNotShown' => "kõiki varjatud postitusi",
      'AllowReplies' => "Vastused on lubatud",
      'AllowSeeActivity' => "Näita teistele kasutajatele infot minu viibimise kohta foorumis",
@@ -166,18 +166,12 @@
      'ErrBannedUser' => 'Kasutaja "%name%" on blokeeritud.',
 -    'ErrBody' => "Sõnum peab sisaldama teksti!",
 -    'ErrBodyTooLarge' => "Palun, tee lühemalt, sõnumi tekst on praegu liiga likk!",
-+	'ErrBody' => "Postitus peab sisaldama teksti!",
++    'ErrBody' => "Postitus peab sisaldama teksti!",
 +    'ErrBodyTooLarge' => "Postituse tekst on liiga pikk!",
      'ErrEmail' => "Sisestatud meiliaadress ei ole korrektne. Proovi uuesti!",
      'ErrEmailExists' => "See meiliaadress kuulub juba ühele kasutajale.",
      'ErrOriginalPassword' => "Kehtiva salasõna pähe esitatud salasõna ei ühti kasutajakirje omaga",
-@@ -196,13 +192,13 @@
-     'Folders' => "Üldjaotised",
-     'FollowExplanation' => "Jälgitavad teemad on ligipääsetavad sinu juhtleheküljelt.",
-     'FollowExplanationMail' => "Sa võid valida võimaluse saada selle teema täienemisest meilitsi automaatse teate.",
--    'FollowThread' => "Jälgi teemat",
-+    'FollowThread' => "Jälgi teemat (kõik vastused saadetakse sulle e-postiga)",
-     'FollowWithEmail' => "Selle teema täienemisel saada mulle meiliga teade",
+@@ -201,8 +197,8 @@
      'FollowWithEmailCC' => "Jälgi teemat ja teata mulle vastustest meilitsi",
      'Forum' => "Rubriik",
      'ForumFolder' => "Rubriigi üldjaotis",
@@ -225,14 +219,14 @@
 +    'MarkRead' => "Märgi kõik postitused loetuks",
      'MarkThreadRead' => "Märgi loetuks",
 -    'MatchAll' => "Kõiki sõnu",
-+	'MatchAll' => "Kõik sarnased",
++    'MatchAll' => "Kõik sarnased",
      'MatchAllForums' => "Otsi kõigist rubriikidest",
 -    'MatchAny' => "Mõnda sõnadest",
 -    'MatchMessages' => "Näita tulemusi sõnumitena",
 -    'MatchPhrase' => "Täpset fraasi",
-+	'MatchAny' => "Sõna osa",
-+	'MatchMessages' => "Näita tulemusi postitustena",
-+	'MatchPhrase' => "Täpne vaste",
++    'MatchAny' => "Sõna osa",
++    'MatchMessages' => "Näita tulemusi postitustena",
++    'MatchPhrase' => "Täpne vaste",
      'MatchThreads' => "Näita tulemusi teemadena",
      'Member' => "Liige",
      'MembershipType' => "Liikmelisuse seisund",
@@ -276,7 +270,7 @@
      'MsgMoveOk' => "Teema tõsteti ümber.",
      'MsgMoveSelectForum' => "Vali enne rubriik.",
      'MsgSplitOk' => "Teema lahutati juurteemast.",
-@@ -293,22 +289,22 @@
+@@ -293,48 +289,48 @@
      'Navigate' => "Navigeeri",
      'NeedsAttention' => "Järgnevad asjad nõuavad tähelepanu",
      'New' => "Uus",
@@ -309,13 +303,14 @@
      'NoForums' => "Pole ühtki rubriiki, mida näidata.",
      'NoGroupMembership' => "Sa ei kuulu ühtegi gruppi.",
      'NoGroupsJoin' => "Pole ühtki gruppi, millega saaks liituda.",
-@@ -316,25 +312,25 @@
+     'NoMoreEmails' => "Sa ei saa enam meilitsi teateid selle teema täienduste kohta.",
      'NoPost' => "Sul pole sellesse rubriiki postitamiseks õigust.",
      'NoRead' => "Sul pole selle rubriigi lugemiseks õigust.",
-     'NoResults' => "Tulemusi ei leitud.",
+-    'NoResults' => "Tulemusi ei leitud.",
 -    'NoResultsHelp' => "Sinu otsingule ei vasta ükski sõnum.<br /><br />Soovitused:<ul><li>Vaata, et otsisõnade õigekiri oleks korrektne.</li><li>Proovi eri märksõnu.</li><li>Katseta üldisemate märksõnadega.</li><li>Proovi vähemate märksõnadega.</li></ul>",
 -    'NoUnapprovedMessages' => "Praegu pole ühtki kinnitamata sõnumit",
-+	'NoResultsHelp' => "Sinu otsingule ei vasta ükski postitus.<br /><br />Soovitused:<ul><li>Kontrolli, et otsisõnade õigekiri oleks korrektne.</li><li>Proovi erinevaid märksõnu.</li><li>Katseta üldisemate märksõnadega.</li><li>Proovi vähemate märksõnadega.</li></ul>",
++    'NoResults' => "Midagi ei leitud.",
++    'NoResultsHelp' => "Sinu otsingule ei vasta ükski postitus.<br /><br />Soovitused:<ul><li>Kontrolli, et otsisõnade õigekiri oleks korrektne.</li><li>Proovi erinevaid märksõnu.</li><li>Katseta üldisemate märksõnadega.</li><li>Proovi vähemate märksõnadega.</li></ul>",
 +    'NoUnapprovedMessages' => "Praegu pole ühtki kinnitamata postitust",
      'NoUnapprovedUsers' => "Praegu pole ühtegi kinnitamata kasutajat",
      'NoUserMatchFilter' => "Ükski kasutaja ei vasta sinu filtrile",
@@ -421,7 +416,7 @@
 -    'ReportPostEmailBody' => "%reportedby% on edastanud teavituse ühe sõnumi kohta. Ta tõi põhjuseks järgneva: \n------------------------------------------------------------------------\n%explanation%\n\n<%url%>\n------------------------------------------------------------------------\Rubriik:   %forumname%\nPealkiri: %subject%\nAutor:  %author%\nIP:      %ip%\nKuupäev:    %date%\n\n%body%\n\n------------------------------------------------------------------------\nSelle sõnumi kustutamiseks vajuta siia:\n<%delete_url%>\n\nSõnumi peitmiseks vajuta siia:\n<%hide_url%>\n\nTeate toimetamiseks vajuta siia:\n<%edit_url%>\n\nTeavitaja, st %reportedby% profiil on siin:\n<%reporter_url%>",
 -    'ReportPostEmailSubject' => "[%forumname%] sõnumist on teavitatud moderaatoreid",
 -    'ReportPostExplanation' => "Oleks soovitav, kui sa lisaksid teavitusega koos ka selgituse selle kohta, et miks sa seda sõnumit moderaatorile osutad ja mida ta sinu meelest tegema peaks. See aitaks kaasa sõnumile moderaatori poolse hinnangu andmisele.",
-+	'Report' => "Kohatu postitus",
++    'Report' => "Kohatu postitus",
 +    'ReportPostEmailBody' => "%reportedby% on edastanud teavituse ühe postituse kohta. Ta tõi põhjuseks järgneva: \n------------------------------------------------------------------------\n%explanation%\n\n<%url%>\n------------------------------------------------------------------------\Rubriik:   %forumname%\nPealkiri: %subject%\nAutor:  %author%\nIP:      %ip%\nKuupäev:    %date%\n\n%body%\n\n------------------------------------------------------------------------\nSelle postituse kustutamiseks vajuta siia:\n<%delete_url%>\n\nPostituse peitmiseks vajuta siia:\n<%hide_url%>\n\nTeate toimetamiseks vajuta siia:\n<%edit_url%>\n\nTeavitaja, st %reportedby% profiil on siin:\n<%reporter_url%>",
 +    'ReportPostEmailSubject' => "[%forumname%] postitusest on teavitatud moderaatoreid",
 +    'ReportPostExplanation' => "Oleks soovitav, kui sa lisaksid teavitusega koos ka selgituse selle kohta, miks sa seda postitust moderaatorile osutad.",
@@ -441,7 +436,7 @@
 -    'SearchRunning' => "Otsimine käib, varu kannatust!",
 +    'SearchAuthors' => "Otsi autoreid",
 +    'SearchMessages' => "Otsi postitusi",
-+    'SearchRunning' => "Otsin, varu kannatust!",
++    'SearchRunning' => "Otsin...",
      'SelectForum' => "Vali rubriik...",
      'SelectGroupMod' => "Vali modereerimiseks grupp",
      'SendPM' => "Saada erakiri",
@@ -531,6 +526,12 @@
      'Views' => "Vaatamisi",
      'Views_Subject' => "vaatamisi",
      'Welcome' => "Tere tulemast",
-@@ -579,2 +574,0 @@
--
--?>
+@@ -513,7 +513,7 @@
+     'Year' => "Aasta",
+     'Yes' => "Jah",
+     'YouWantToFollow' => "Sa oled andnud märku, et soovid teemat jälgida.",
+-    'YourEmail' => "Sinu meiliaadress",
++    'YourEmail' => "Sinu e-posti aadress",
+     'YourName' => "Sinu nimi",
+     'again' => "uuesti",
+     'by' => "",
