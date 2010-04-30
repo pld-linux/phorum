@@ -7,7 +7,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.15a
-Release:	0.70
+Release:	0.73
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -27,6 +27,7 @@ Patch4:		sys-recaptcha.patch
 Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
 Patch7:		update-et.patch
+Patch8:		update-ru.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
@@ -327,6 +328,7 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
