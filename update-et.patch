@@ -1,5 +1,5 @@
---- phorum-5.2.15a/include/lang/estonian.php	2010-04-12 10:20:13.000000000 +0300
-+++ phorum-5.2.15a/include/lang/estonian.php	2010-04-12 16:45:47.493235036 +0300
+--- phorum-5.2.15a/include/lang/estonian.php	2010-04-12 16:45:47.493235036 +0300
++++ phorum-5.2.15a/include/lang/estonian.php	2010-04-30 15:50:48.938036024 +0300
 @@ -18,14 +18,10 @@
  // Date formatting. Check the PHP-docs for the syntax of these
  // entries (http://www.php.net/strftime). One tip: do not use
@@ -151,7 +151,7 @@
 -    'EmailVerifyBody' => "Tere %uname%,\n\nSee kiri saadeti sulle, kuna sa soovisid oma profiilis meiliaadressi muuta. Oma aadressi kinnitamiseks on vaja sulle selles kirjas edastatud kontrollkoodi. Kui sa pole %uname%, siis lihtsalt ignoreeri seda kirja.\n\nUus meiliaadress on: %newmail%\nKontrollkood on: %mailcode%\n\nSisesta see kood oma profiili, et muutmine kinnitada:\n\n<%cc_url%>\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
 -    'EmailVerifyDesc' => "Meiliaadressi kontrollimine",
 +    'EmailVerify' => "E-posti aadressi kontrollimine",
-+    'EmailVerifyBody' => "Tere %uname%,\n\nSee kiri saadeti sulle, kuna sa soovisid oma profiilis e-posti aadressi muuta. E-posti kinnitamiseks vajad selles kirjas edastatud kontrollkoodi. Kui sa pole %uname%, siis lihtsalt ignoreeri seda kirja.\n\nUus e-posti aadress: %newmail%\nKontrollkood: %mailcode%\n\nSisesta see kood oma profiili, et muutmine kinnitada:\n\n<%cc_url%>\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
++    'EmailVerifyBody' => "Tere %uname%,\n\nSee kiri saadeti sulle, kuna sa soovisid oma profiilis e-posti aadressi muuta. E-posti kinnitamiseks vajad selles kirjas edastatud kontrollkoodi. Kui sa pole %uname%, siis lihtsalt ignoreeri seda kirja.\n\nUus e-posti aadress: %newmail%\nKontrollkood: %mailcode%\n\nSisesta see kood oma profiili, et muutmine kinnitada:\n\n<%cc_url%>\n\nAlati abivalmilt\n{$PHORUM['title']}i suhtlusrobot",
 +    'EmailVerifyDesc' => "E-posti aadressi kontrollimine",
      'EmailVerifyEnterCode' => "Sisesta saadud kontrollkood",
 -    'EmailVerifySubject' => "Sinu uue meiliaadressi kontrollimine",
@@ -206,7 +206,7 @@
 -    'LostPassEmailBody2' => "Sa saad logida foorumisse $PHORUM[title] at ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
 -    'LostPassEmailSubject' => "Sinu meldimisinfo foorumis $PHORUM[title]",
 +    'LostPassEmailBody1' => "Keegi (loodetavasti sina ise) on edastanud uue salasõna taotluse seoses sinu kontoga foorumis {$PHORUM['title']}.  Kui see polnud sina, siis ignoreeri seda teadet ja kasuta edasi oma vana salasõna.\n\nEnt kui see olid sina, siis siin on sinu uued meldimisandmed.",
-+    'LostPassEmailBody2' => "Sa saad logida foorumisse {$PHORUM['title']} aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nParimate soovidega\n{$PHORUM['title']}Delfi",
++    'LostPassEmailBody2' => "Sa saad logida foorumisse {$PHORUM['title']} aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nParimate soovidega\n{$PHORUM['title']}",
 +    'LostPassEmailSubject' => "Sinu meldimisinfo foorumis {$PHORUM['title']}",
      'LostPassError' => "Sisestatud meiliaadressi ei leitud.",
 -    'LostPassInfo' => "Sisesta siia oma meiliaadress ja sinu salasõna saadetakse sulle postkasti.",
@@ -338,11 +338,13 @@
      'PMFolderDeleteSuccess' => "Kaust kustutatud.",
      'PMFolderExistsError' => "Seda kausta ei saa luua, sest see on juba olemas.",
      'PMFolderIsEmpty' => "Selles kaustas pole kirju.",
-@@ -349,7 +345,7 @@
+@@ -348,8 +344,8 @@
+     'PMNotAvailable' => "Nõutud erakiri pole saadaval.",
      'PMNotSent' => "Sinu erakiri jäi saatmata. Aset leidis mingi seletamatu viga.",
      'PMNotifyEnableSetting' => "Erakirja saabumisest teata meilitsi",
-     'PMNotifyMessage' => "Sa oled saanud uue erakirja.\n\nSaatja : %author%\nPealkiri: %subject%\n\nKirja saad lugeda sellel leheküljel:\n\n%read_url%\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
+-    'PMNotifyMessage' => "Sa oled saanud uue erakirja.\n\nSaatja : %author%\nPealkiri: %subject%\n\nKirja saad lugeda sellel leheküljel:\n\n%read_url%\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
 -    'PMNotifySubject' => "Uus erakiri foorumis $PHORUM[title]",
++    'PMNotifyMessage' => "Sa oled saanud uue erakirja.\n\nSaatja : %author%\nPealkiri: %subject%\n\nKirja saad lugeda sellel leheküljel:\n\n%read_url%\n\nAlati abivalmilt\n{$PHORUM['title']}i suhtlusrobot",
 +    'PMNotifySubject' => "Uus erakiri foorumis {$PHORUM['title']}",
      'PMRead' => "Loe",
      'PMReply' => "Vasta",
@@ -399,7 +401,7 @@
 -    'RegBack' => "Sisselogimiseks klõpsa siia!",
 -    'RegThanks' => "Aitäh registreerimast!",
 -    'RegVerifyEmail' => "Aitäh registreerimast! Hetkel sa veel foorumit kasutada ei saa, sest su konto on aktiveerimata. Juhised konto aktiveerimiseks on sinu postkasti poole teele saadetud.",
-+    'RegApprovedEmailBody' => "Sinu konto avamine {$PHORUM['title']}is on moderaatorite poolt heaks kiidetud. Siseneda saad aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nParimate soovidega\n$PHORUM[title]",
++    'RegApprovedEmailBody' => "Sinu konto avamine {$PHORUM['title']}is on moderaatorite poolt heaks kiidetud. Siseneda saad aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nParimate soovidega\n{$PHORUM['title']}",
 +    'RegApprovedSubject' => "{$PHORUM['title']}i konto kinnitatud",
 +    'RegBack' => "Sisselogimiseks kliki siia!",
 +    'RegThanks' => "Täname, et registreerusid!",
@@ -508,9 +510,10 @@
      'UserProfile' => "Kasutaja profiil",
      'Username' => "Kasutajanimi",
 -    'VerifyRegEmailBody1' => "Konto avamiseks $PHORUM[title]is on vaja tõestada, et soovi selleks avaldasid tõepoolest sina. Kui sa soovid kontot avada, siis kinnita oma soovi vajutades alljärgneval spetsiaalselt selleks otstarbeks genereeritud lingil, mis on edastatud ainult sinu postiaadressile!",
-+    'VerifyRegEmailBody1' => "Konto avamiseks {$PHORUM['title']}is on vaja tõestada, et soovi selleks avaldasid tõepoolest sina. Kui sa soovid kontot avada, siis kinnita oma soovi vajutades alljärgneval spetsiaalselt selleks otstarbeks genereeritud lingil, mis on edastatud ainult sinu postiaadressile!",
-     'VerifyRegEmailBody2' => "Kui konto aktiveerimiseks pole vaja, et selle kiidaks heaks mõni foorumi moderaatoritest, siis saad juba peale lingi vajutamist logida foorumisse aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
+-    'VerifyRegEmailBody2' => "Kui konto aktiveerimiseks pole vaja, et selle kiidaks heaks mõni foorumi moderaatoritest, siis saad juba peale lingi vajutamist logida foorumisse aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nAlati abivalmilt\n$PHORUM[title]i suhtlusrobot",
 -    'VerifyRegEmailSubject' => "$PHORUM[title]i konto avamine",
++    'VerifyRegEmailBody1' => "Konto avamiseks {$PHORUM['title']}is on vaja tõestada, et soovi selleks avaldasid tõepoolest sina. Kui sa soovid kontot avada, siis kinnita oma soovi vajutades alljärgneval spetsiaalselt selleks otstarbeks genereeritud lingil, mis on edastatud ainult sinu postiaadressile!",
++    'VerifyRegEmailBody2' => "Kui konto aktiveerimiseks pole vaja, et selle kiidaks heaks mõni foorumi moderaatoritest, siis saad juba peale lingi vajutamist logida foorumisse aadressilt ".phorum_get_url(PHORUM_LOGIN_URL)."\n\nAlati abivalmilt\n{$PHORUM['title']}i suhtlusrobot",
 +    'VerifyRegEmailSubject' => "{$PHORUM['title']}i konto avamine",
      'ViewChanges' => "Vaata muudatusi",
      'ViewFlatList' => "Lõimede päised koos lisainfoga",
@@ -526,7 +529,7 @@
      'Views' => "Vaatamisi",
      'Views_Subject' => "vaatamisi",
      'Welcome' => "Tere tulemast",
-@@ -513,7 +513,7 @@
+@@ -517,7 +513,7 @@
      'Year' => "Aasta",
      'Yes' => "Jah",
      'YouWantToFollow' => "Sa oled andnud märku, et soovid teemat jälgida.",
