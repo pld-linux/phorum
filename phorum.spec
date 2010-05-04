@@ -2,12 +2,12 @@
 # - module images are not accessible from web (checkme?)
 %define		mainver	5.2
 %include	/usr/lib/rpm/macros.php
-%define		php_min_version 5.0.0
+%define		php_min_version 5.2.0
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.15a
-Release:	0.75
+Release:	0.76
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -28,6 +28,7 @@ Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
 Patch7:		update-et.patch
 Patch8:		update-ru.patch
+Patch9:		multibyte_description.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
@@ -329,6 +330,7 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
