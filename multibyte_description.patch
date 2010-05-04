@@ -1,24 +1,26 @@
 http://www.phorum.org/phorum5/read.php?61,131083
 
 --- phorum/htdocs/read.php~	2010-05-03 18:12:21.000000000 +0300
-+++ phorum/htdocs/read.php	2010-05-04 11:38:50.829674278 +0300
-@@ -788,7 +788,18 @@
++++ phorum/htdocs/read.php	2010-05-04 15:01:42.811819248 +0300
+@@ -788,7 +788,9 @@
      // here, because of modules adding images and formatting.
      $PHORUM["DATA"]["HTML_TITLE"] = trim(strip_tags($PHORUM["threaded_read"] ? $PHORUM["DATA"]["MESSAGE"]["subject"] : $PHORUM["DATA"]["TOPIC"]["subject"]));
  
 -    $PHORUM["DATA"]["DESCRIPTION"] = htmlspecialchars(preg_replace('!\s+!s'," ",strip_tags(substr($PHORUM["DATA"]["TOPIC"]["body"],0,300))), ENT_COMPAT, $PHORUM["DATA"]["HCHARSET"]);
 +    $PHORUM["DATA"]["DESCRIPTION"] = preg_replace('!\s+!s'," ", strip_tags($PHORUM["DATA"]["TOPIC"]["body"]));
-+    if (strtoupper($PHORUM["DATA"]["HCHARSET"])=='UTF-8') {
-+        if (function_exists('mb_substr')) {
-+            $PHORUM["DATA"]["DESCRIPTION"] = mb_substr($PHORUM["DATA"]["DESCRIPTION"], 0, 300, $PHORUM["DATA"]["HCHARSET"]);
-+        } else {
-+            // No change to short description without PHP warning
-+            $PHORUM["DATA"]["DESCRIPTION"] = $PHORUM["DATA"]["DESCRIPTION"];
-+        }
-+    } else {
-+        $PHORUM["DATA"]["DESCRIPTION"] = substr($PHORUM["DATA"]["DESCRIPTION"], 0, 300);
-+    }
++    $PHORUM["DATA"]["DESCRIPTION"] = mb_substr($PHORUM["DATA"]["DESCRIPTION"], 0, 300, $PHORUM["DATA"]["HCHARSET"]);
 +    $PHORUM["DATA"]["DESCRIPTION"] = htmlspecialchars($PHORUM["DATA"]["DESCRIPTION"], ENT_COMPAT, $PHORUM["DATA"]["HCHARSET"]);
  
      // add feed url
      if(isset($PHORUM['use_rss']) && $PHORUM['use_rss']){
+--- phorum/htdocs/search.php~	2010-05-04 12:28:25.000000000 +0300
++++ phorum/htdocs/search.php	2010-05-04 15:00:21.735132358 +0300
+@@ -258,7 +258,7 @@
+             // strip HTML & BB Code
+             if(!$raw_body) {
+                 $body = phorum_strip_body($arr["rows"][$key]["body"]);
+-                $arr["rows"][$key]["short_body"] = substr($body, 0, 400);
++                $arr["rows"][$key]["short_body"] = mb_substr($body, 0, 400, $PHORUM["DATA"]["HCHARSET"]);
+             }
+             $arr["rows"][$key]["raw_datestamp"] = $row["datestamp"];
+             $arr["rows"][$key]["datestamp"] = phorum_relative_date($row["datestamp"]);
