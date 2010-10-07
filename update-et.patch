@@ -1,5 +1,5 @@
 --- phorum-5.2.15a/include/lang/estonian.php	2010-04-12 16:45:47.493235036 +0300
-+++ phorum-5.2.15a/include/lang/estonian.php	2010-04-30 15:50:48.938036024 +0300
++++ phorum-5.2.15a/include/lang/estonian.php	2010-10-07 15:50:16.438161665 +0300
 @@ -18,14 +18,10 @@
  // Date formatting. Check the PHP-docs for the syntax of these
  // entries (http://www.php.net/strftime). One tip: do not use
@@ -666,7 +666,7 @@
      'Views' => "Vaatamisi",
      'Views_Subject' => "vaatamisi",
      'Welcome' => "Tere tulemast",
-@@ -516,8 +512,8 @@
+@@ -516,15 +512,15 @@
      'Wrote' => "kirjutas",
      'Year' => "Aasta",
      'Yes' => "Jah",
@@ -677,3 +677,11 @@
      'YourName' => "Sinu nimi",
      'again' => "uuesti",
      'by' => "",
+     'newflag' => "uus",
+     'noreplies' => "vastuseid pole",
+     'of' => "/",
+-    'relative_ago' => "eest",
++    'relative_ago' => "tagasi",
+     'relative_days' => "päeva",
+     'relative_months' => "kuu",
+     'relative_one_day' => "päev",
