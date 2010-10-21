@@ -1,0 +1,23 @@
+add new macros, to avoid using language constructs in translations.
+
+- $PHORUM['file_space_quota'] -> %file_space_quota%
+
+still todo:
+- $PHORUM[title] -> %phorum_title%
+- $PHORUM['max_file_size'] -> %max_file_size%
+- phorum_get_url(PHORUM_LOGIN_URL) -> %login_url%
+
+--- ../BUILD/phorum-5.2.15a/include/api/file.php	2010-10-22 00:35:13.428590924 +0300
++++ /usr/share/phorum/include/api/file.php	2010-10-22 00:34:39.120486837 +0300
+@@ -212,9 +212,10 @@
+             $sz = phorum_db_get_user_filesize_total($PHORUM["user"]["user_id"]);
+             $sz += $file["filesize"];
+             if ($sz > $PHORUM["file_space_quota"]*1024) {
++                $msg = str_replace("%file_space_quota%", $PHORUM['file_space_quota'], $PHORUM["DATA"]["LANG"]["FileOverQuota"]);
+                 return phorum_api_error_set(
+                     PHORUM_ERRNO_NOACCESS,
+-                    $PHORUM["DATA"]["LANG"]["FileOverQuota"]
++                    $msg,
+                 );
+             }
+         }
