@@ -6,7 +6,19 @@ add new macros, to avoid using language constructs in translations.
 
 still todo:
 - $PHORUM[title] -> %phorum_title%
+        "EmailVerifyBody"       =>
+        "LostPassEmailSubject"  =>
+        "LostPassEmailBody1"    =>
+        "LostPassEmailBody2"    =>
+        "PMNotifyMessage"       =>
+        "PMNotifySubject"       =>
+        "RegApprovedEmailBody"  =>
+        "VerifyRegEmailBody1"   =>
+        "VerifyRegEmailBody2"   =>
 - phorum_get_url(PHORUM_LOGIN_URL) -> %login_url%
+        "LostPassEmailBody2"    =>
+        "RegApprovedEmailBody"  =>
+        "VerifyRegEmailBody2"   =>
 
 --- phorum-5.2.15a/include/api/file.php	2010-10-22 00:35:13.428590924 +0300
 +++ phorum-5.2.15a/include/api/file.php	2010-10-22 00:46:32.460815378 +0300
