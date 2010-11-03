@@ -1,5 +1,5 @@
---- phorum/common.php	2010-01-12 19:23:19.129687819 +0200
-+++ phorum/common.php	2010-01-12 19:36:17.512942870 +0200
+--- phorum/common.php	2010-01-12 19:36:17.512942870 +0200
++++ phorum/common.php	2010-02-10 17:49:57.546277613 +0200
 @@ -20,6 +20,8 @@
  // Check that this file is not loaded directly.
  if ( basename( __FILE__ ) == basename( $_SERVER["PHP_SELF"] ) ) exit();
@@ -36,7 +36,14 @@
                  Please check the file permissions<br/>for this file. <?php
              // Unknown error.
              } else {
-@@ -134,7 +136,7 @@
+@@ -128,13 +130,13 @@
+ // layer, but people might still be using "mysqli" as their configured
+ // database type.
+ if ($PHORUM["DBCONFIG"]["type"] == "mysqli" &&
+-    !file_exists("./include/db/mysqli.php")) {
++    !file_exists(PHORUM_INCLUDES_DIR.'/db/mysqli.php')) {
+     $PHORUM["DBCONFIG"]["type"] = "mysql";
+ }
  
  // Load the database layer.
  $PHORUM['DBCONFIG']['type'] = basename($PHORUM['DBCONFIG']['type']);
@@ -172,7 +179,20 @@
  // Run sanity checks prior to installing Phorum. Here we do some
  // checks to see if the environment is setup correctly for running
 --- phorum/include/admin/header.php	2010-01-06 20:02:05.938378394 +0200
-+++ phorum/include/admin/header.php	2010-02-10 17:52:51.032840427 +0200
++++ phorum-5.2.15a/include/admin/header.php	2010-11-03 17:28:23.203504874 +0200
+@@ -22,10 +22,10 @@
+     // load the default Phorum language
+     if(isset($PHORUM["default_forum_options"]["language"])){
+         $lang = basename($PHORUM["default_forum_options"]["language"]);
+-        if (!file_exists("./include/lang/${lang}.php")) {
++        if (!file_exists(PHORUM_INCLUDES_DIR."/lang/${lang}.php")) {
+             $lang = PHORUM_DEFAULT_LANGUAGE;
+         }
+-        require_once PHORUM_INCLUDES_DIR.'/lang/{$lang}.php';
++        require_once PHORUM_INCLUDES_DIR."/lang/{$lang}.php";
+     }
+ 
+     // HTTP Content-Type header with the charset from the default language
 @@ -36,7 +36,7 @@
  
      // set the path to the CSS file to pull in
@@ -259,8 +279,25 @@
      exit();
  }
 --- phorum/htdocs/javascript.php	2010-01-12 19:00:24.036492037 +0200
-+++ phorum/htdocs/javascript.php	2010-01-12 19:02:34.413145270 +0200
-@@ -31,15 +31,15 @@
++++ phorum-5.2.15a/htdocs/javascript.php	2010-11-03 17:28:23.199339500 +0200
+@@ -31,14 +31,14 @@
+ $module_registrations[] = array(
+     'module'    => 'core',
+     'source'    => 'file(include/ajax/json2.js.php)',
+-    'cache_key' => filemtime('./include/ajax/json2.js.php')
++    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/ajax/json2.js.php')
+ );
+ 
+ // Add core Phorum posting form object manipulation client JavaScript code.
+ $module_registrations[] = array(
+     'module'    => 'core',
+     'source'    => 'file(include/posting/form_objects.js.php)',
+-    'cache_key' => filemtime('./include/posting/form_objects.js.php')
++    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/posting/form_objects.js.php')
+ );
+ 
+ 
+@@ -46,15 +46,15 @@
  $module_registrations[] = array(
      'module'    => 'core',
      'source'    => 'file(include/ajax/client.js.php)',
@@ -279,7 +316,7 @@
      $module_registrations[] = array(
          'module' => $PHORUM['template'] . ' template',
          'source' => 'template(javascript)'
-@@ -234,10 +234,10 @@
+@@ -249,10 +249,10 @@
          {
              case "file":
                  ob_start();
@@ -293,25 +330,6 @@
                  include($path);
                  $content .= ob_get_contents();
                  ob_end_clean();
---- phorum-5.2.15a/htdocs/javascript.php~	2010-04-01 16:25:23.000000000 +0300
-+++ phorum-5.2.15a/htdocs/javascript.php	2010-04-01 16:39:30.384965963 +0300
-@@ -31,14 +31,14 @@
- $module_registrations[] = array(
-     'module'    => 'core',
-     'source'    => 'file(include/ajax/json2.js.php)',
--    'cache_key' => filemtime('./include/ajax/json2.js.php')
-+    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/ajax/json2.js.php')
- );
- 
- // Add core Phorum posting form object manipulation client JavaScript code.
- $module_registrations[] = array(
-     'module'    => 'core',
-     'source'    => 'file(include/posting/form_objects.js.php)',
--    'cache_key' => filemtime('./include/posting/form_objects.js.php')
-+    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/posting/form_objects.js.php')
- );
- 
- 
 --- phorum/htdocs/css.php~	2010-01-12 19:27:06.000000000 +0200
 +++ phorum/htdocs/css.php	2010-01-12 19:30:47.253394705 +0200
 @@ -274,7 +274,11 @@
@@ -327,21 +345,6 @@
                  $add .= ob_get_contents();
                  ob_end_clean();
                  break;
---- phorum/include/admin/header.php	2010-01-13 21:30:22.607156616 +0200
-+++ phorum/include/admin/header.php	2010-02-10 17:52:51.032840427 +0200
-@@ -22,10 +22,10 @@
-     // load the default Phorum language
-     if(isset($PHORUM["default_forum_options"]["language"])){
-         $lang = basename($PHORUM["default_forum_options"]["language"]);
--        if (!file_exists("./include/lang/${lang}.php")) {
-+        if (!file_exists(PHORUM_INCLUDES_DIR."/lang/${lang}.php")) {
-             $lang = PHORUM_DEFAULT_LANGUAGE;
-         }
--        require_once PHORUM_INCLUDES_DIR.'/lang/{$lang}.php';
-+        require_once PHORUM_INCLUDES_DIR."/lang/{$lang}.php";
-     }
- 
-     // HTTP Content-Type header with the charset from the default language
 --- phorum/htdocs/admin.php	2010-01-13 21:31:15.510488551 +0200
 +++ phorum/htdocs/admin.php	2010-01-13 21:33:38.367557450 +0200
 @@ -77,7 +77,7 @@
@@ -691,19 +694,8 @@
  
  // Mapping of status to display representation.
  $status2display = array(
---- phorum/./common.php~	2010-02-10 17:45:45.000000000 +0200
-+++ phorum/./common.php	2010-02-10 17:49:57.546277613 +0200
-@@ -130,7 +130,7 @@
- // layer, but people might still be using "mysqli" as their configured
- // database type.
- if ($PHORUM["DBCONFIG"]["type"] == "mysqli" &&
--    !file_exists("./include/db/mysqli.php")) {
-+    !file_exists(PHORUM_INCLUDES_DIR.'/db/mysqli.php')) {
-     $PHORUM["DBCONFIG"]["type"] = "mysql";
- }
- 
---- phorum/./htdocs/control.php~	2010-02-10 17:40:57.000000000 +0200
-+++ phorum/./htdocs/control.php	2010-02-10 17:50:30.492841807 +0200
+--- phorum/htdocs/control.php~	2010-02-10 17:40:57.000000000 +0200
++++ phorum/htdocs/control.php	2010-02-10 17:50:30.492841807 +0200
 @@ -216,10 +216,10 @@
  // If no module did handle the control center panel, then try to load
  // a standard control center panel file.
