@@ -7,7 +7,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.15a
-Release:	2.2
+Release:	2.12
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -337,6 +337,14 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
+# recreate archives
+zip %{_sourcedir}/%{name}-estonian-%{version}.zip $(unzip -l %{SOURCE1} | awk '/.php$/{print $NF}')
+
+# recreate archives
+cp -p docs/README.ru include/lang/README.russian.txt
+zip %{_sourcedir}/%{name}-russian-%{version}.zip include/lang/russian.php include/lang/README.russian.txt
+exit 1
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_cachedir}}
@@ -344,6 +352,9 @@ cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
+
+rm $RPM_BUILD_ROOT%{_appdir}/include/lang/estonian.php
+rm $RPM_BUILD_ROOT%{_appdir}/include/lang/russian.php
 
 cat > langmap <<'EOF'
 cs czech
@@ -356,14 +367,12 @@ de german_sie
 en english
 es spanish
 es spanish_latin_american
-et estonian
 fi finnish
 fr french
 it italian
 nb norwegian
 nl dutch
 nl dutch_informal
-ru russian
 sv swedish
 tr turkish
 EOF
