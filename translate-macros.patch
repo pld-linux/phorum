@@ -28,7 +28,7 @@ add new macros, to avoid using language constructs in translations.
                  return phorum_api_error_set(
                      PHORUM_ERRNO_NOACCESS,
 -                    $PHORUM["DATA"]["LANG"]["FileOverQuota"]
-+                    $msg,
++                    $msg
                  );
              }
          }
