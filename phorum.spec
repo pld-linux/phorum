@@ -7,17 +7,11 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.15a
-Release:	2.2
+Release:	3
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
 # Source0-md5:	e1a0a3974fc60ced71c95d282e7bcc3e
-# Source1Download: http://www.phorum.org/phorum5/read.php?65,129182
-Source1:	http://www.phorum.org/phorum5/file.php/download/65/2522/%{name}-estonian-5.2.7a.zip
-# Source1-md5:	cd2d5fb9b0b17da0d805209ac76b58d4
-# Source2Download: http://www.phorum.org/phorum5/read.php?65,142430,142430
-Source2:	http://www.phorum.org/phorum5/file.php/65/4131/Russian-Utf8.zip
-# Source2-md5:	510e8b1750bebef99fdfdab3504ac60d
 Source3:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
@@ -26,8 +20,6 @@ Patch3:		sys-phpmailer.patch
 Patch4:		sys-recaptcha.patch
 Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
-Patch7:		update-et.patch
-Patch8:		update-ru.patch
 Patch9:		multibyte_description.patch
 Patch10:	translate-macros.patch
 URL:		http://www.phorum.org/
@@ -249,7 +241,7 @@ Provides:	%{name}(template) = %{mainver}
 Lightweight template for Phorum.
 
 %prep
-%setup -q -a1 -a2
+%setup -q
 find '(' -name '*.php' -o -name '*.css' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 
 install -d htdocs/admin examples
@@ -275,10 +267,6 @@ mv portable scripts examples
 mv docs/html htmldoc
 mv docs/docbook .
 mv docs/pdf pdfdoc
-
-mv russian.php include/lang
-iconv -fcp1251 -tutf8 'readme!!!.txt' > docs/README.ru
-rm -f 'readme!!!.txt'
 
 # kill old files by phorum
 rm post.php
@@ -329,8 +317,6 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
 %patch9 -p1
 %patch10 -p1
 
