@@ -112,18 +112,19 @@ detailed list:
                  'mailsubject'   => $PHORUM['DATA']['LANG']['EmailVerifySubject'],
                  'uname'         => $PHORUM['DATA']['PROFILE']['username'],
                  'newmail'       => $_POST['email'],
---- phorum-5.2.15a/htdocs/login.php	2010-11-03 18:26:22.469689876 +0200
-+++ phorum-5.2.15a/htdocs/login.php	2010-11-03 18:34:26.970474420 +0200
+--- phorum-5.2.15a/htdocs/login.php	2010-11-03 18:34:26.970474420 +0200
++++ phorum-5.2.15a/htdocs/login.php	2010-11-04 15:18:16.823011070 +0200
 @@ -169,11 +169,16 @@
  
                  // Mail the new confirmation code to the user.
                  $verify_url = phorum_get_url(PHORUM_REGISTER_URL, "approve=".$tmp_user["password_temp"]."$uid");
+-                $maildata["mailsubject"] = $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"];
 +                $replace = array(
 +                    "%phorum_title%" => $PHORUM['title'],
 +                    "%login_url%" => phorum_get_url(PHORUM_LOGIN_URL),
 +                );
 +
-                 $maildata["mailsubject"] = $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"];
++                $maildata["mailsubject"] = str_replace(array_keys($replace), array_values($replace), $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"]);
                  $maildata["mailmessage"] =
 -                   wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"],72).
 +                   wordwrap(str_replace(array_keys($replace), array_values($replace), $PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"]),72).
@@ -156,8 +157,8 @@ detailed list:
                  phorum_email_user(array( 0 => $user['email'] ), $maildata);
  
                  $okmsg = $PHORUM["DATA"]["LANG"]["LostPassSent"];
---- phorum-5.2.15a/htdocs/register.php~	2010-11-04 15:00:10.000000000 +0200
-+++ phorum-5.2.15a/htdocs/register.php	2010-11-04 15:12:06.565756512 +0200
+--- phorum-5.2.15a/htdocs/register.php	2010-11-04 15:12:06.565756512 +0200
++++ phorum-5.2.15a/htdocs/register.php	2010-11-04 15:16:56.303019222 +0200
 @@ -250,9 +250,18 @@
                      if (preg_match("!aol\.com$!i", $userdata["email"])) {
                          $verify_url = "<a href=\"$verify_url\">$verify_url</a>";
@@ -169,8 +170,9 @@ detailed list:
 +                    );
 +
                      $maildata = array();
-                     $maildata["mailsubject"] = $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"];
+-                    $maildata["mailsubject"] = $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"];
 -                    $maildata["mailmessage"] = wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"], 72)."\n\n$verify_url\n\n".wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody2"], 72);
++                    $maildata["mailsubject"] = str_replace(array_keys($replace), array_values($replace), $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"]);
 +                    $maildata["mailmessage"] =
 +                       wordwrap(str_replace(array_keys($replace), array_values($replace), $PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"]),72).
 +                       "\n\n$verify_url\n\n".
