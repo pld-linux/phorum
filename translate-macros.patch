@@ -3,8 +3,22 @@ add new macros, to avoid using language constructs in translations.
 - $PHORUM['file_space_quota'] -> %file_space_quota%
 - str_replace(";", ", ", $PHORUM['file_types']) -> %file_types%
 - $PHORUM['max_file_size'] -> %max_file_size%
+
+detailed list:
 - $PHORUM[title] -> %phorum_title%
+        "EmailVerifyBody"       =>
+        "LostPassEmailSubject"  =>
+        "LostPassEmailBody1"    =>
+        "LostPassEmailBody2"    =>
+        "PMNotifyMessage"       =>
+        "PMNotifySubject"       =>
+        "RegApprovedEmailBody"  =>
+        "VerifyRegEmailBody1"   =>
+        "VerifyRegEmailBody2"   =>
 - phorum_get_url(PHORUM_LOGIN_URL) -> %login_url%
+        "LostPassEmailBody2"    =>
+        "RegApprovedEmailBody"  =>
+        "VerifyRegEmailBody2"   =>
 
 --- phorum-5.2.15a/include/api/file.php	2010-10-22 00:35:13.428590924 +0300
 +++ phorum-5.2.15a/include/api/file.php	2010-10-22 00:46:32.460815378 +0300
@@ -59,24 +73,29 @@ add new macros, to avoid using language constructs in translations.
  }
  
  if($PHORUM["file_space_quota"]){
---- phorum-5.2.15a/include/email_functions.php~	2010-11-03 17:22:38.000000000 +0200
-+++ phorum-5.2.15a/include/email_functions.php	2010-11-03 18:40:12.594189789 +0200
-@@ -280,6 +280,7 @@
-         "full_body"      => $message["message"],
-         "plain_body"     => wordwrap(phorum_strip_body($message["message"]),72),
-         "read_url"       => phorum_get_url_no_uri_auth(PHORUM_PM_URL, "page=read", "pm_id=" . $message["pm_message_id"]),
-+        "phorum_title"   => $PHORUM['title'],
+--- phorum-5.2.15a/include/email_functions.php~	2010-11-04 12:58:50.000000000 +0200
++++ phorum-5.2.15a/include/email_functions.php	2010-11-04 14:22:21.362512810 +0200
+@@ -300,8 +300,8 @@
+             include(PHORUM_INCLUDES_DIR."/lang/{$PHORUM['language']}.php");
+         }
  
-         // For email_user_start.
-         "mailmessagetpl" => 'PMNotifyMessage',
---- phorum-5.2.15a/include/controlcenter/users.php~	2010-11-03 17:22:37.000000000 +0200
-+++ phorum-5.2.15a/include/controlcenter/users.php	2010-11-03 18:42:43.376258562 +0200
-@@ -51,6 +51,8 @@
+-        $mail_data["mailmessage"] = $PHORUM["DATA"]["LANG"]['PMNotifyMessage'];
+-        $mail_data["mailsubject"] = $PHORUM["DATA"]["LANG"]['PMNotifySubject'];
++        $mail_data["mailmessage"] = str_replace("%phorum_title%",  $PHORUM['title'], $PHORUM["DATA"]["LANG"]['PMNotifyMessage']);
++        $mail_data["mailsubject"] = str_replace("%phorum_title%",  $PHORUM['title'], $PHORUM["DATA"]["LANG"]['PMNotifySubject']);
+ 
+         $addresses = array();
+         foreach ($users as $user) {
+--- phorum-5.2.15a/include/controlcenter/users.php~	2010-11-04 12:58:48.000000000 +0200
++++ phorum-5.2.15a/include/controlcenter/users.php	2010-11-04 14:53:22.786298453 +0200
+@@ -49,8 +49,8 @@
+             	
+                 $userdata["active"]=PHORUM_USER_ACTIVE;
                  // send reg approved message
-                 $maildata["mailsubject"]=$PHORUM["DATA"]["LANG"]["RegApprovedSubject"];
-                 $maildata["mailmessage"]=wordwrap($PHORUM["DATA"]["LANG"]["RegApprovedEmailBody"], 72);
-+                $maildata["login_url"]=phorum_get_url(PHORUM_LOGIN_URL);
-+                $maildata["phorum_title"]=$PHORUM['title'];
+-                $maildata["mailsubject"]=$PHORUM["DATA"]["LANG"]["RegApprovedSubject"];
+-                $maildata["mailmessage"]=wordwrap($PHORUM["DATA"]["LANG"]["RegApprovedEmailBody"], 72);
++                $maildata["mailsubject"]=str_replace("%phorum_title%",  $PHORUM['title'], $PHORUM["DATA"]["LANG"]["RegApprovedSubject"]);
++                $maildata["mailmessage"]=wordwrap(str_replace("%phorum_title%",  $PHORUM['title'], $PHORUM["DATA"]["LANG"]["RegApprovedEmailBody"]), 72);
                  phorum_email_user(array($user["email"]), $maildata);
                  
              }
