@@ -10,7 +10,7 @@
 +
 +    if (empty($PHORUM["DATA"]["HCHARSET"]) or !$cut) {
 +        // if unable to get charset or word cut not enabled use wordwrap
-+        return wordwrap($st, $width, $break, $cut);
++        return wordwrap($str, $width, $break, $cut);
 +    }
 +
 +    $l = mb_strlen($str, $PHORUM["DATA"]["HCHARSET"]);
