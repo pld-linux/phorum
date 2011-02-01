@@ -6,12 +6,12 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	%{mainver}.15a
-Release:	4
+Version:	%{mainver}.16
+Release:	0.1
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	e1a0a3974fc60ced71c95d282e7bcc3e
+# Source0-md5:	fb35b7b4a2561c83c76488f9a6186ad7
 Source3:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
@@ -311,6 +311,13 @@ grep -Elr '(include|require)_once' include htdocs mods *.php | xargs sed -i -e "
 sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once '../common.php';," htdocs/*.php
 sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';," *.php
 
+# NOTE when upgrading version:
+# no paths should contain ./mods/, ./includes, those should be marked by
+# PHORUM_DIR or PHORUM_INCLUDES_DIR constants
+# grep -Fr ./mods/ .
+# you can rm -rf these dirs to simplify:
+# rm -rf htmldoc/ docbook/ docs/ examples/ *.lang
+
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -347,6 +354,7 @@ es spanish_latin_american
 et estonian
 fi finnish
 fr french
+fr french-utf8
 it italian
 nb norwegian
 nl dutch
@@ -504,6 +512,13 @@ fi
 %{_appdir}/htdocs/search.php
 %{_appdir}/htdocs/versioncheck.php
 
+# TODO: check and use external pkg
+%dir %{_appdir}/include/javascript
+%{_appdir}/include/javascript/jquery-1.4.4.min.js
+%{_appdir}/include/javascript/jquery.bgiframe-2.1.1.min.js
+%{_appdir}/include/javascript/jquery.json-1.3.min.js
+%{_appdir}/include/javascript/phorum-javascript-library.php
+
 %dir %attr(770,root,http) /var/cache/phorum
 
 %{_examplesdir}/%{name}-%{version}
@@ -562,9 +577,9 @@ fi
 %defattr(644,root,root,755)
 %{_appdir}/mods/spamhurdles/captcha
 %{_appdir}/mods/spamhurdles/db
-%{_appdir}/mods/spamhurdles/lib
-%{_appdir}/mods/spamhurdles/*.css
-%{_appdir}/mods/spamhurdles/*.jpg
+%{_appdir}/mods/spamhurdles/hurdles
+%{_appdir}/mods/spamhurdles/include
+%{_appdir}/mods/spamhurdles/spamhurdles.js
 
 %files mod-tidy
 %defattr(644,root,root,755)

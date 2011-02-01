@@ -178,8 +178,8 @@
  
  // Run sanity checks prior to installing Phorum. Here we do some
  // checks to see if the environment is setup correctly for running
---- phorum/include/admin/header.php	2010-01-06 20:02:05.938378394 +0200
-+++ phorum-5.2.15a/include/admin/header.php	2010-11-03 17:28:23.203504874 +0200
+--- phorum-5.2.16/include/admin/header.php~	2011-01-31 16:15:33.000000000 +0200
++++ phorum-5.2.16/include/admin/header.php	2011-01-31 16:15:45.020813848 +0200
 @@ -22,10 +22,10 @@
      // load the default Phorum language
      if(isset($PHORUM["default_forum_options"]["language"])){
@@ -193,12 +193,14 @@
      }
  
      // HTTP Content-Type header with the charset from the default language
-@@ -36,7 +36,7 @@
+@@ -36,8 +36,8 @@
  
      // set the path to the CSS file to pull in
      $default_admin_css_file = 'default.css';
--    $admin_css_path = $PHORUM["http_path"].'/include/admin/css/' . $default_admin_css_file;
-+    $admin_css_path = $PHORUM["http_path"].'/admin/css/' . $default_admin_css_file;
+-    $admin_css_path = dirname($PHORUM['admin_http_path']) .
+-                      '/include/admin/css/' . $default_admin_css_file;
++    $admin_css_path = $PHORUM['admin_http_path'] .
++                      '/admin/css/' . $default_admin_css_file;
  
      /**
       * [hook]
@@ -278,9 +280,9 @@
      include PHORUM_INCLUDES_DIR.'/ajax/call.$ajax_call.php';
      exit();
  }
---- phorum/htdocs/javascript.php	2010-01-12 19:00:24.036492037 +0200
-+++ phorum-5.2.15a/htdocs/javascript.php	2010-11-03 17:28:23.199339500 +0200
-@@ -31,14 +31,14 @@
+--- phorum-5.2.16/htdocs/javascript.php~	2011-01-31 15:57:12.000000000 +0200
++++ phorum-5.2.16/htdocs/javascript.php	2011-01-31 16:17:20.624954178 +0200
+@@ -36,7 +36,7 @@
  $module_registrations[] = array(
      'module'    => 'core',
      'source'    => 'file(include/ajax/json2.js.php)',
@@ -288,7 +290,8 @@
 +    'cache_key' => filemtime(PHORUM_INCLUDES_DIR.'/ajax/json2.js.php')
  );
  
- // Add core Phorum posting form object manipulation client JavaScript code.
+ // Add the jQuery JavaScript library code.
+@@ -70,7 +70,7 @@
  $module_registrations[] = array(
      'module'    => 'core',
      'source'    => 'file(include/posting/form_objects.js.php)',
@@ -297,7 +300,7 @@
  );
  
  
-@@ -46,15 +46,15 @@
+@@ -78,7 +78,7 @@
  $module_registrations[] = array(
      'module'    => 'core',
      'source'    => 'file(include/ajax/client.js.php)',
@@ -306,16 +309,17 @@
                     $PHORUM['DATA']['URL']['AJAX']
  );
  
- // Add template specific javascript code, if available. The template writer
+@@ -86,8 +86,8 @@
  // can put the javascript code to include in the file
  // "templates/<name>/javascript.tpl" or "templates/<name>/javascript.php".
--if (file_exists("./templates/{$PHORUM['template']}/javascript.tpl") ||
--    file_exists("./templates/{$PHORUM['template']}/javascript.php")) {
-+if (file_exists(PHORUM_DIR."/templates/{$PHORUM['template']}/javascript.tpl") ||
-+    file_exists(PHORUM_DIR."/templates/{$PHORUM['template']}/javascript.php")) {
-     $module_registrations[] = array(
-         'module' => $PHORUM['template'] . ' template',
-         'source' => 'template(javascript)'
+ if (!$for_admin) {
+-    if (file_exists("./templates/{$PHORUM['template']}/javascript.tpl") ||
+-        file_exists("./templates/{$PHORUM['template']}/javascript.php")) {
++    if (file_exists(PHORUM_DIR."/templates/{$PHORUM['template']}/javascript.tpl") ||
++        file_exists(PHORUM_DIR."/templates/{$PHORUM['template']}/javascript.php")) {
+         $module_registrations[] = array(
+             'module' => $PHORUM['template'] . ' template',
+             'source' => 'template(javascript)'
 @@ -249,10 +249,10 @@
          {
              case "file":
@@ -501,14 +505,14 @@
          			return array(
                      PHORUM_SANITY_WARN,
                      "Your module &quot;$entry&quot; doesn't have an corresponding .php file in its directory. 
---- phorum-5.2.14/mods/username_restrictions/settings.php~	2010-01-13 22:36:06.000000000 +0200
-+++ phorum-5.2.14/mods/username_restrictions/settings.php	2010-01-13 22:41:43.609857184 +0200
+--- phorum-5.2.16/mods/username_restrictions/settings.php~	2011-01-31 15:57:12.000000000 +0200
++++ phorum-5.2.16/mods/username_restrictions/settings.php	2011-01-31 16:14:26.662057255 +0200
 @@ -1,7 +1,7 @@
  <?php
      if (!defined("PHORUM_ADMIN")) return;
  
--    include("./mods/username_restrictions/defaults.php");
-+    include(PHORUM_DIR."/mods/username_restrictions/defaults.php");
+-    require_once "./mods/username_restrictions/defaults.php";
++    require_once PHORUM_DIR."/mods/username_restrictions/defaults.php";
  
      // Options for the valid username characters.
      $valid_chars_options = array(
@@ -613,55 +617,28 @@
  
  // The default list of smileys to install upon initial setup.
  global $MOD_SMILEY_DEFAULT_SMILEYS;
---- phorum-5.2.14/mods/spamhurdles/db.php~	2010-01-13 22:36:06.000000000 +0200
-+++ phorum-5.2.14/mods/spamhurdles/db.php	2010-01-13 22:45:21.459835060 +0200
-@@ -17,7 +17,7 @@
- {
-     global $PHORUM;
+--- phorum-5.2.16/mods/spamhurdles/api.php~	2011-01-31 23:08:38.000000000 +0200
++++ phorum-5.2.16/mods/spamhurdles/api.php	2011-02-01 09:58:16.184438583 +0200
+@@ -2,14 +2,14 @@
  
--    $layerpath = "./mods/spamhurdles/db/{$PHORUM["DBCONFIG"]["type"]}";
-+    $layerpath = PHORUM_DIR."/mods/spamhurdles/db/{$PHORUM["DBCONFIG"]["type"]}";
+ // {{{ Required libraries
  
-     // Allow db layers to provide an initialization script of their own.
-     // The main goal for this script is to allow a db layer to override the
---- phorum-5.2.14/mods/spamhurdles/spamhurdles.php	2010-01-13 22:45:36.219833260 +0200
-+++ phorum/mods/spamhurdles/spamhurdles.php	2010-03-29 19:52:17.206811507 +0300
-@@ -92,7 +92,7 @@
-     // If a spoken captcha is requested, then generate a wav file for it
-     // and stream it to the user.
-     if (isset($PHORUM["args"]["spokencaptcha"])) {
--        include("./mods/spamhurdles/captcha/spoken_captcha.php");
-+        include(PHORUM_DIR."/mods/spamhurdles/captcha/spoken_captcha.php");
-         exit(0);
-     }
+-require_once './mods/spamhurdles/defaults.php' ;
+-require_once './mods/spamhurdles/db.php' ;
+-require_once './mods/spamhurdles/include/crypt/aes.php';
++require_once PHORUM_DIR.'/spamhurdles/defaults.php' ;
++require_once PHORUM_DIR.'/spamhurdles/db.php' ;
++require_once PHORUM_DIR.'/spamhurdles/include/crypt/aes.php';
  
-@@ -104,7 +104,7 @@
-             isset($PHORUM["SPAMHURDLES"]["captcha_class"])) {
-             $question = $PHORUM["SPAMHURDLES"]["captcha"]["question"];
-             $class = $PHORUM["SPAMHURDLES"]["captcha_class"];
--            require_once PHORUM_DIR.'/mods/spamhurdles/captcha/class.{$class}.php';
-+            require_once PHORUM_DIR."/mods/spamhurdles/captcha/class.{$class}.php";
-             $captcha = new $class();
-             $captcha->generate_image($question);
-             exit(0);
-@@ -170,7 +170,7 @@
-         ($type == "external_captcha")) ) {
+ // For EVENTLOG_LVL_INFO. Made conditional, just in case the Event Logging
+ // module was removed from the Phorum tree.
+-if (file_exists('./mods/event_logging/constants.php')) {
+-    require_once './mods/event_logging/constants.php';
++if (file_exists(PHORUM_DIR.'/event_logging/constants.php')) {
++    require_once PHORUM_DIR.'/event_logging/constants.php';
+ }
  
-         $class = "captcha_" . $conf["captcha_type"];
--        require_once PHORUM_DIR.'/mods/spamhurdles/captcha/class.{$class}.php';
-+        require_once PHORUM_DIR."/mods/spamhurdles/captcha/class.{$class}.php";
-         $captcha = new $class();
-         $captcha = $captcha->generate_captcha();
-         $PHORUM["SPAMHURDLES"]["captcha_class"] = $class;
-@@ -423,7 +423,7 @@
-     // Check if the captcha is filled in right.
-     if (!$do_block && isset($spamhurdles["captcha"])) {
-         $class = $spamhurdles["captcha_class"];
--        require_once PHORUM_DIR.'/mods/spamhurdles/captcha/class.{$class}.php';
-+        require_once PHORUM_DIR."/mods/spamhurdles/captcha/class.{$class}.php";
-         $captcha = new $class();
-         $error = $captcha->check_answer($spamhurdles["captcha"]);
-         if ($error) {
+ // }}}
 --- phorum/include/admin/forum_defaults.php~	2010-01-13 23:12:00.000000000 +0200
 +++ phorum/include/admin/forum_defaults.php	2010-01-13 23:16:15.052984229 +0200
 @@ -21,6 +21,6 @@
