@@ -1,0 +1,11 @@
+--- phorum/include/db/mysql/mysqli_replication.php~	2011-02-01 16:10:39.000000000 +0200
++++ phorum/include/db/mysql/mysqli_replication.php	2011-02-01 16:20:50.127122766 +0200
+@@ -119,7 +119,7 @@
+             } else {
+                 // we suppress errors from the mysqli_connect command as errors
+                 // are catched differently.            	
+-                $conn_write = @mysqli_connect(
++                $conn_write = mysqli_connect(
+                     $PHORUM['DBCONFIG']['server'],
+                     $PHORUM['DBCONFIG']['user'],
+                     $PHORUM['DBCONFIG']['password'],
