@@ -7,7 +7,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.16
-Release:	0.1
+Release:	0.3
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -27,7 +27,7 @@ Patch12:	unhide-errors.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
-BuildRequires:	rpmbuild(macros) >= 1.533
+BuildRequires:	rpmbuild(macros) >= 1.595
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
 Requires:	%{name}(DB_Provider)
@@ -265,6 +265,12 @@ mv include/db/config.php.sample .
 mv include/api/examples examples/api
 mv docs/example_mods examples/mods
 mv portable scripts examples
+
+# move console_upgrade back, it is actually useful
+install -d scripts
+mv examples/scripts/console_upgrade.php scripts
+chmod a+rx scripts/*
+
 # so we don't have to package html/pdf/docbook via docs/*
 mv docs/html htmldoc
 mv docs/docbook .
@@ -337,7 +343,7 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_cachedir}}
-cp -a *.php htdocs include mods templates $RPM_BUILD_ROOT%{_appdir}
+cp -a *.php htdocs include mods templates scripts $RPM_BUILD_ROOT%{_appdir}
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
@@ -436,15 +442,16 @@ if [ "$1" = 0 ]; then
 fi
 
 %post admin
-if [ "$1" = 1 ]; then
-	%banner -e %{name} <<-EOF
-	Initial Phorum setup is simple as:
-	1. creating mysql database:
-	mysqladmin create phorum5
-	2. granting privs and editing %{_sysconfdir}/config.php
-	3. opening http://localhost/phorum/admin.php
+%banner -o -e %{name} <<-EOF
+Initial Phorum setup is simple as:
+
+1. creating mysql database:
+mysqladmin create phorum5
+2. granting privs and editing %{_sysconfdir}/config.php
+3. opening http://localhost/phorum/admin.php
 EOF
-fi
+
+%{_appdir}/scripts/console_upgrade.php || :
 
 %triggerin -- apache1 < 1.3.37-3, apache1-base
 %webapp_register apache %{_webapp}
@@ -470,6 +477,7 @@ fi
 %{_appdir}/common.php
 %{_appdir}/script.php
 %dir %{_appdir}/mods
+%dir %{_appdir}/scripts
 %dir %{_appdir}/templates
 
 %dir %{_appdir}/include
@@ -531,6 +539,7 @@ fi
 %{_appdir}/htdocs/admin.php
 %{_appdir}/include/admin
 %{_appdir}/include/db/upgrade
+%attr(755,root,root) %{_appdir}/scripts/console_upgrade.php
 
 %files phpdoc
 %defattr(644,root,root,755)
