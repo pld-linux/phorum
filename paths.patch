@@ -199,7 +199,7 @@
      $default_admin_css_file = 'default.css';
 -    $admin_css_path = dirname($PHORUM['admin_http_path']) .
 -                      '/include/admin/css/' . $default_admin_css_file;
-+    $admin_css_path = $PHORUM['admin_http_path'] .
++    $admin_css_path = dirname($PHORUM['admin_http_path']) .
 +                      '/admin/css/' . $default_admin_css_file;
  
      /**
