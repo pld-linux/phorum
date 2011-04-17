@@ -9,3 +9,23 @@
                      $PHORUM['DBCONFIG']['server'],
                      $PHORUM['DBCONFIG']['user'],
                      $PHORUM['DBCONFIG']['password'],
+--- phorum/include/db/mysql/mysqli_replication.php.original	2011-01-27 13:25:29.000000000 +0200
++++ phorum/include/db/mysql/mysqli_replication.php	2011-04-11 13:34:43.832383910 +0300
+@@ -98,7 +98,7 @@
+ 
+             $conn_read = phorum_db_get_random_connection($PHORUM['DBCONFIG']['slaves']);
+ 
+-            if(!empty($PHORUM['DBCONFIG']['charset'])) {
++            if($conn_read && !empty($PHORUM['DBCONFIG']['charset'])) {
+                 mysqli_query( $conn_read,"SET NAMES '{$PHORUM['DBCONFIG']['charset']}'");
+             }
+         }
+@@ -129,7 +129,7 @@
+                     );
+             }
+ 
+-            if(!empty($PHORUM['DBCONFIG']['charset'])) {
++            if($conn_write && !empty($PHORUM['DBCONFIG']['charset'])) {
+                 mysqli_query( $conn_write,"SET NAMES '{$PHORUM['DBCONFIG']['charset']}'");
+             }
+         }
