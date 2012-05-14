@@ -7,12 +7,12 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	%{mainver}.16
-Release:	0.5
+Version:	%{mainver}.17
+Release:	0.1
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	fb35b7b4a2561c83c76488f9a6186ad7
+# Source0-md5:	a88b423df3b95799a98d33b4765b86f1
 Source3:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
@@ -21,11 +21,9 @@ Patch3:		sys-phpmailer.patch
 Patch4:		sys-recaptcha.patch
 Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
-Patch9:		multibyte_description.patch
 Patch10:	translate-macros.patch
 Patch11:	wordwrap.patch
 Patch12:	unhide-errors.patch
-Patch13:	cli-progs.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
@@ -246,7 +244,7 @@ Lightweight template for Phorum.
 
 %prep
 %setup -q
-find '(' -name '*.php' -o -name '*.css' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+%undos -f php,css,js,html,txt
 
 install -d htdocs/admin examples
 
@@ -254,14 +252,13 @@ install -d htdocs/admin examples
 find -name .htaccess | xargs rm -v
 
 # php-phpmailer
-rm -rf mods/smtp_mail/phpmailer
+%{__rm} -r mods/smtp_mail/phpmailer
 
 # php-recaptcha
-rm -rf mods/spamhurdles/captcha/recaptcha-php-1.9
-rm -f mods/spamhurdles/MANIFEST
+%{__rm} -r mods/spamhurdles/captcha/recaptcha-php-1.9
 
 # php-json
-rm -f include/api/json-pear.php
+%{__rm} include/api/json-pear.php
 
 mv include/db/config.php.sample .
 mv include/api/examples examples/api
@@ -279,7 +276,7 @@ mv docs/docbook .
 mv docs/pdf pdfdoc
 
 # kill old files by phorum
-rm post.php
+%{__rm} post.php
 
 # fixup structure, move public files to htdocs.
 mv *.php images htdocs
@@ -324,6 +321,7 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 # no paths should contain ./mods/, ./includes, those should be marked by
 # PHORUM_DIR or PHORUM_INCLUDES_DIR constants
 # grep -Fr ./mods/ .
+# grep -Fr ./includes/ .
 # you can rm -rf these dirs to simplify:
 # rm -rf htmldoc/ docbook/ docs/ examples/ *.lang
 
@@ -334,11 +332,9 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
@@ -347,9 +343,9 @@ find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_cachedir}}
 cp -a *.php htdocs include mods templates scripts $RPM_BUILD_ROOT%{_appdir}
-cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-cp -a config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -p config.php.sample $RPM_BUILD_ROOT%{_sysconfdir}/config.php
 
 cat > langmap <<'EOF'
 cs czech
@@ -534,7 +530,7 @@ fi
 # TODO: check and use external pkg
 %dir %{_appdir}/include/javascript
 %{_appdir}/include/javascript/jquery-1.4.4.min.js
-%{_appdir}/include/javascript/jquery.bgiframe-2.1.1.min.js
+%{_appdir}/include/javascript/jquery.bgiframe-2.1.2.min.js
 %{_appdir}/include/javascript/jquery.json-1.3.min.js
 %{_appdir}/include/javascript/phorum-javascript-library.php
 
