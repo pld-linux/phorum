@@ -1,16 +1,5 @@
---- phorum/include/db/mysql/mysqli_replication.php~	2011-02-01 16:10:39.000000000 +0200
-+++ phorum/include/db/mysql/mysqli_replication.php	2011-02-01 16:20:50.127122766 +0200
-@@ -119,7 +119,7 @@
-             } else {
-                 // we suppress errors from the mysqli_connect command as errors
-                 // are catched differently.            	
--                $conn_write = @mysqli_connect(
-+                $conn_write = mysqli_connect(
-                     $PHORUM['DBCONFIG']['server'],
-                     $PHORUM['DBCONFIG']['user'],
-                     $PHORUM['DBCONFIG']['password'],
---- phorum/include/db/mysql/mysqli_replication.php.original	2011-01-27 13:25:29.000000000 +0200
-+++ phorum/include/db/mysql/mysqli_replication.php	2011-04-11 13:34:43.832383910 +0300
+--- phorum/include/db/mysql/mysqli_replication.php	2011-04-11 13:34:43.832383910 +0300
++++ phorum-5.2.18/include/db/mysql/mysqli_replication.php	2012-05-15 23:31:55.915439900 +0300
 @@ -98,7 +98,7 @@
  
              $conn_read = phorum_db_get_random_connection($PHORUM['DBCONFIG']['slaves']);
@@ -20,6 +9,15 @@
                  mysqli_query( $conn_read,"SET NAMES '{$PHORUM['DBCONFIG']['charset']}'");
              }
          }
+@@ -119,7 +119,7 @@
+             } else {
+                 // we suppress errors from the mysqli_connect command as errors
+                 // are catched differently.            	
+-                $conn_write = @mysqli_connect(
++                $conn_write = mysqli_connect(
+                     $PHORUM['DBCONFIG']['server'],
+                     $PHORUM['DBCONFIG']['user'],
+                     $PHORUM['DBCONFIG']['password'],
 @@ -129,7 +129,7 @@
                      );
              }
@@ -29,3 +27,23 @@
                  mysqli_query( $conn_write,"SET NAMES '{$PHORUM['DBCONFIG']['charset']}'");
              }
          }
+@@ -412,7 +412,7 @@
+             $server_data = $db_array[$rand_server];
+             // we suppress errors from the mysqli_connect command as errors
+             // are catched differently.
+-            $conn = @mysqli_connect(
++            $conn = mysqli_connect(
+                                    $server_data['server'],
+                                    $server_data['user'],
+                                    $server_data['password'],
+--- phorum-5.2.18/./include/db/mysql/mysqli.php~	2012-05-15 23:33:39.000000000 +0300
++++ phorum-5.2.18/./include/db/mysql/mysqli.php	2012-05-15 23:34:26.022634898 +0300
+@@ -87,7 +87,7 @@
+         $PHORUM = $GLOBALS['PHORUM'];
+         // we suppress errors from the mysqli_connect command as errors
+         // are catched differently.
+-        $conn = @mysqli_connect(
++        $conn = mysqli_connect(
+             $PHORUM['DBCONFIG']['server'],
+             $PHORUM['DBCONFIG']['user'],
+             $PHORUM['DBCONFIG']['password'],
