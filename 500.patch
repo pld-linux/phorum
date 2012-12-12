@@ -1,0 +1,10 @@
+--- ./common.php	2012-12-12 19:37:10.000000000 +0200
++++ ./common.php	2012-12-12 19:37:33.010371715 +0200
+@@ -144,6 +144,7 @@
+         phorum_redirect_by_url($PHORUM["DBCONFIG"]["down_page"]);
+         exit();
+     } else {
++        header('HTTP/1.1 500 Internal Server Error');
+         echo "The database connection failed. Please check your database configuration in include/db/config.php. If the configuration is okay, check if the database server is running.";
+         exit();
+     }

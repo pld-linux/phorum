@@ -24,6 +24,7 @@ Patch6:		no-pear-json.patch
 Patch10:	translate-macros.patch
 Patch11:	wordwrap.patch
 Patch12:	unhide-errors.patch
+Patch13:	500.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
@@ -335,6 +336,7 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
