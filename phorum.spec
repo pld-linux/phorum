@@ -8,7 +8,7 @@ Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
 Version:	%{mainver}.19
-Release:	1
+Release:	2
 License:	Apache-like
 Group:		Applications/WWW
 Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
@@ -33,11 +33,11 @@ BuildRequires:	rpmbuild(macros) >= 1.595
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
 Requires:	%{name}(DB_Provider)
-Requires:	php-date
-Requires:	php-gd
-Requires:	php-json
-Requires:	php-mbstring
-Requires:	php-pcre
+Requires:	php(date)
+Requires:	php(gd)
+Requires:	php(json)
+Requires:	php(mbstring)
+Requires:	php(pcre)
 Requires:	rpm-whiteout >= 1.33
 Requires:	webapps
 Requires:	webserver(access)
@@ -103,7 +103,7 @@ Dokumentacja do Phorum.
 Summary:	Phorum MySQL Backend: mysql
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Requires:	php-mysql
+Requires:	php(mysql)
 Provides:	%{name}(DB_Provider)
 
 %description db-mysql
@@ -113,7 +113,7 @@ Phorum MySQL Database backend via mysql PHP extension.
 Summary:	Phorum MySQL Backend: mysqli
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Requires:	php-mysqli
+Requires:	php(mysqli)
 Provides:	%{name}(DB_Provider)
 
 %description db-mysqli
