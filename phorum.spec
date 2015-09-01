@@ -7,12 +7,12 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	%{mainver}.19
-Release:	2
+Version:	%{mainver}.20
+Release:	1
 License:	Apache-like
 Group:		Applications/WWW
-Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	6151520b21eb40c1afa6d02a3afc2886
+Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.gz
+# Source0-md5:	46c9edad965401102e1a943d13bf315e
 Source3:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
@@ -24,7 +24,6 @@ Patch6:		no-pear-json.patch
 Patch10:	translate-macros.patch
 Patch11:	wordwrap.patch
 Patch12:	unhide-errors.patch
-Patch13:	500.patch
 URL:		http://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
@@ -244,7 +243,8 @@ Provides:	%{name}(template) = %{mainver}
 Lightweight template for Phorum.
 
 %prep
-%setup -q
+%setup -qc
+mv Phorum-Core-*/* .
 %undos -f php,css,js,html,txt
 
 install -d htdocs/admin examples
@@ -336,7 +336,6 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p1
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
