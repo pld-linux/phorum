@@ -2,7 +2,6 @@
 # - module images are not accessible from web
 # - jquery accessed only by mods/editor_tools, move to plugin as hook?
 %define		mainver	5.2
-%include	/usr/lib/rpm/macros.php
 %define		php_min_version 5.2.0
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
