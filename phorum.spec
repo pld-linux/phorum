@@ -530,6 +530,8 @@ fi
 %{_appdir}/include/javascript/jquery.bgiframe-2.1.2.min.js
 %{_appdir}/include/javascript/jquery.json-1.3.min.js
 %{_appdir}/include/javascript/phorum-javascript-library.php
+# https://github.com/paragonie/random_compat
+%{_appdir}/include/random_compat-2.0.2
 
 %dir %attr(770,root,http) /var/cache/phorum
 
