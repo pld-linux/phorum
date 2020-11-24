@@ -78,7 +78,6 @@ dodatkiem do każdej witryny.
 Summary:	Administrative Interface for Phorum
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	phorum-setup
 
 %description admin
 This package contains Administrative interface for Phorum.
