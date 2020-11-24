@@ -6,12 +6,12 @@
 Summary:	Phorum is a web based message board written in PHP
 Summary(pl.UTF-8):	Phorum - implementacja forum WWW w PHP
 Name:		phorum
-Version:	%{mainver}.20
+Version:	%{mainver}.23
 Release:	1
 License:	Apache-like
 Group:		Applications/WWW
-Source0:	http://www.phorum.org/downloads/%{name}-%{version}.tar.gz
-# Source0-md5:	46c9edad965401102e1a943d13bf315e
+Source0:	https://www.phorum.org/downloads/%{name}-%{version}.tar.gz
+# Source0-md5:	a44c193b2e140f72d4090de345289bd1
 Source3:	apache.conf
 Patch0:		paths.patch
 Patch1:		mysql.patch
@@ -21,9 +21,8 @@ Patch4:		sys-recaptcha.patch
 Patch5:		enable-mbstring.patch
 Patch6:		no-pear-json.patch
 Patch10:	translate-macros.patch
-Patch11:	wordwrap.patch
 Patch12:	unhide-errors.patch
-URL:		http://www.phorum.org/
+URL:		https://www.phorum.org/
 BuildRequires:	iconv
 BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.595
@@ -242,7 +241,7 @@ Lightweight template for Phorum.
 
 %prep
 %setup -qc
-mv Phorum-Core-*/* .
+mv Core-phorum_*/* .
 %undos -f php,css,js,html,txt
 
 install -d htdocs/admin examples
@@ -332,7 +331,6 @@ sed -i -e "s,require_once PHORUM_DIR.'/common.php';,require_once 'common.php';,"
 %patch5 -p1
 %patch6 -p1
 %patch10 -p1
-%patch11 -p1
 %patch12 -p1
 
 # cleanup backups after patching

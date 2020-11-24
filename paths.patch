@@ -1,5 +1,5 @@
---- phorum/common.php	2010-01-12 19:36:17.512942870 +0200
-+++ phorum/common.php	2010-02-10 17:49:57.546277613 +0200
+--- phorum-5.2.23/common.php~	2020-11-24 12:17:50.000000000 +0200
++++ phorum-5.2.23/common.php	2020-11-24 12:20:12.218398789 +0200
 @@ -20,6 +20,8 @@
  // Check that this file is not loaded directly.
  if ( basename( __FILE__ ) == basename( $_SERVER["PHP_SELF"] ) ) exit();
@@ -9,7 +9,7 @@
  
  // ----------------------------------------------------------------------
  // Initialize variables and constants and load required libraries
-@@ -82,22 +84,22 @@
+@@ -95,18 +95,18 @@
      ob_start();
  
      // Load configuration.
@@ -21,8 +21,8 @@
          // No database configuration found.
 -        if (!file_exists("./include/db/config.php")) { ?>
 +        if (!file_exists("/etc/webapps/phorum/config.php")) { ?>
-             Phorum has been installed on this server, but the configuration<br/>
-             for the database connection has not yet been made. Please read<br/>
+             Phorum has been installed on this server, but the configuration<br />
+             for the database connection has not yet been made. Please read<br />
              <a href="docs/install.txt">docs/install.txt</a> for installation
              instructions. <?php
          } else {
@@ -31,11 +31,6 @@
              // Unable to read the configuration file.
              if (!$fp) { ?>
                  A database configuration file was found in
--                ./include/db/config.php,<br/>but Phorum was unable to read it.
-+                config.php,<br/>but Phorum was unable to read it.
-                 Please check the file permissions<br/>for this file. <?php
-             // Unknown error.
-             } else {
 @@ -128,13 +130,13 @@
  // layer, but people might still be using "mysqli" as their configured
  // database type.
@@ -238,8 +233,8 @@
      background-position: 5px 5px;
      background-repeat: no-repeat;
      font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica;
---- phorum-5.2.14/include/admin/cache.php	2010-01-11 16:58:45.262528168 +0200
-+++ phorum/include/admin/cache.php	2010-02-10 17:53:45.066588504 +0200
+--- phorum-5.2.23/include/admin/cache.php~	2020-11-24 12:17:50.000000000 +0200
++++ phorum-5.2.23/include/admin/cache.php	2020-11-24 12:19:24.709279215 +0200
 @@ -32,7 +32,7 @@
              case "cache":
  
@@ -255,7 +250,7 @@
                      $new_settings[$field] = "file";
 -                } elseif ( !file_exists( './include/cache/'.$value.'.php' ) ) {
 +                } elseif ( !file_exists( PHORUM_INCLUDES_DIR.'/cache/'.$value.'.php' ) ) {
-                     $error = "This cache layer ($value) does not exist.";
+                     $error .= 'This cache layer ($value) does not exist. ';
                  } else {
                      $new_settings[$field] = $value;
 --- phorum/include/db/mysql.php~	2010-01-12 18:38:55.000000000 +0200
@@ -468,8 +463,8 @@
  
      } else {
  
---- phorum-5.2.14/include/admin/sanity_checks/modules_filenames.php~	2010-01-13 22:36:06.000000000 +0200
-+++ phorum-5.2.14/include/admin/sanity_checks/modules_filenames.php	2010-01-13 22:41:12.744027348 +0200
+--- phorum-5.2.23/include/admin/sanity_checks/modules_filenames.php~	2020-11-24 12:17:50.000000000 +0200
++++ phorum-5.2.23/include/admin/sanity_checks/modules_filenames.php	2020-11-24 12:18:51.454228915 +0200
 @@ -29,7 +29,7 @@
          }
  
@@ -480,31 +475,31 @@
          {
          	// Some entries which we skip by default.
 @@ -39,20 +39,20 @@
-         	
-         	// Read in the module information.
-         	$lines = array();
--        	if (file_exists("./mods/$entry/info.txt")) {
--        		$lines = file("./mods/$entry/info.txt");
-+        	if (file_exists(PHORUM_DIR."/mods/$entry/info.txt")) {
-+        		$lines = file(PHORUM_DIR."/mods/$entry/info.txt");
-         	} 
-         	
--        	if(is_file("./mods/$entry") && substr($entry, -4)==".php") {
-+        	if(is_file(PHORUM_DIR."/mods/$entry") && substr($entry, -4)==".php") {
-         		// one file module, skip it
-         	} else {
--        		if(!file_exists("./mods/$entry/info.txt")) {
-+        		if(!file_exists(PHORUM_DIR."/mods/$entry/info.txt")) {
-         			return array(
+ 
+             // Read in the module information.
+             $lines = array();
+-            if (file_exists("./mods/$entry/info.txt")) {
+-                $lines = file("./mods/$entry/info.txt");
++            if (file_exists(PHORUM_DIR."/mods/$entry/info.txt")) {
++                $lines = file(PHORUM_DIR."/mods/$entry/info.txt");
+             }
+ 
+-            if(is_file("./mods/$entry") && substr($entry, -4)==".php") {
++            if(is_file(PHORUM_DIR."/mods/$entry") && substr($entry, -4)==".php") {
+                 // one file module, skip it
+             } else {
+-                if(!file_exists("./mods/$entry/info.txt")) {
++                if(!file_exists(PHORUM_DIR."/mods/$entry/info.txt")) {
+                     return array(
                      PHORUM_SANITY_WARN,
-                     "Your module &quot;$entry&quot; doesn't have an info.txt file in its directory. Either its not a module or the installation of that module is broken.", 
+                     "Your module &quot;$entry&quot; doesn't have an info.txt file in its directory. Either its not a module or the installation of that module is broken.",
                      "You should remove all files or directories which are not modules from the mods-directory and fix broken module installations."
                      );
--        		} elseif (!file_exists("./mods/$entry/$entry.php")) {
-+        		} elseif (!file_exists(PHORUM_DIR."/mods/$entry/$entry.php")) {
-         			return array(
+-                } elseif (!file_exists("./mods/$entry/$entry.php")) {
++                } elseif (!file_exists(PHORUM_DIR."/mods/$entry/$entry.php")) {
+                     return array(
                      PHORUM_SANITY_WARN,
-                     "Your module &quot;$entry&quot; doesn't have an corresponding .php file in its directory. 
+                     "Your module &quot;$entry&quot; doesn't have an corresponding .php file in its directory.
 --- phorum-5.2.16/mods/username_restrictions/settings.php~	2011-01-31 15:57:12.000000000 +0200
 +++ phorum-5.2.16/mods/username_restrictions/settings.php	2011-01-31 16:14:26.662057255 +0200
 @@ -1,7 +1,7 @@

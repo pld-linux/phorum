@@ -83,15 +83,15 @@ detailed list:
  
          // For email_user_start.
          "mailmessagetpl" => 'PMNotifyMessage',
---- phorum-5.2.15a/include/controlcenter/users.php~	2010-11-04 12:58:48.000000000 +0200
-+++ phorum-5.2.15a/include/controlcenter/users.php	2010-11-04 14:53:22.786298453 +0200
+--- phorum-5.2.23/include/controlcenter/users.php~	2020-11-24 12:28:50.000000000 +0200
++++ phorum-5.2.23/include/controlcenter/users.php	2020-11-24 12:29:15.829798916 +0200
 @@ -51,6 +51,7 @@
                  // send reg approved message
                  $maildata["mailsubject"]=$PHORUM["DATA"]["LANG"]["RegApprovedSubject"];
-                 $maildata["mailmessage"]=wordwrap($PHORUM["DATA"]["LANG"]["RegApprovedEmailBody"], 72);
+                 $maildata["mailmessage"]=phorum_wordwrap($PHORUM["DATA"]["LANG"]["RegApprovedEmailBody"], 72);
 +                $maildata["phorum_title"]=$PHORUM['title'];
                  phorum_email_user(array($user["email"]), $maildata);
-                 
+ 
              }
 --- phorum-5.2.15a/include/controlcenter/email.php~	2010-11-03 17:22:38.000000000 +0200
 +++ phorum-5.2.15a/include/controlcenter/email.php	2010-11-03 18:23:56.130121394 +0200
@@ -124,22 +124,20 @@ detailed list:
                  $maildata['mailmessage'] =
                     wordwrap($PHORUM["DATA"]["LANG"]["LostPassEmailBody1"],72).
                     "\n\n".
---- phorum-5.2.15a/htdocs/register.php	2010-11-04 15:12:06.565756512 +0200
-+++ phorum-5.2.15a/htdocs/register.php	2010-11-04 15:16:56.303019222 +0200
-@@ -250,9 +250,15 @@
-                     if (preg_match("!aol\.com$!i", $userdata["email"])) {
+--- phorum-5.2.23/htdocs/register.php~	2020-11-24 12:28:52.000000000 +0200
++++ phorum-5.2.23/htdocs/register.php	2020-11-24 12:30:23.433289302 +0200
+@@ -257,8 +257,13 @@
                          $verify_url = "<a href=\"$verify_url\">$verify_url</a>";
                      }
-+
                      $maildata = array();
 +                    $maildata["phorum_title"] = $PHORUM['title'];
 +                    $maildata["login_url"] = phorum_get_url(PHORUM_LOGIN_URL);
                      $maildata["mailsubject"] = $PHORUM["DATA"]["LANG"]["VerifyRegEmailSubject"];
--                    $maildata["mailmessage"] = wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"], 72)."\n\n$verify_url\n\n".wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody2"], 72);
+-                    $maildata["mailmessage"] = phorum_wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"], 72)."\n\n$verify_url\n\n".phorum_wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody2"], 72);
 +                    $maildata["mailmessage"] =
-+                       wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"],72).
++                       phorum_wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody1"], 72).
 +                       "\n\n$verify_url\n\n".
-+                       wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody2"],72);
++                       phorum_wordwrap($PHORUM["DATA"]["LANG"]["VerifyRegEmailBody2"], 72);
                      phorum_email_user(array($userdata["email"]), $maildata);
                  }
  

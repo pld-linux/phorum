@@ -1,26 +1,26 @@
 basically running and manually verifying result:
 
-grep -r '"docs/' . -l |xargs sed -i -e 's,"docs/,"http://www.phorum.org/phorum5/docs/,g'
+grep -r '"docs/' . -l |xargs sed -i -e 's,"docs/,"https://www.phorum.org/phorum5/docs/,g'
 
---- phorum-5.2.14/common.php	2010-01-06 19:20:04.816130942 +0200
-+++ phorum-5.2.14-docsurl/common.php	2010-01-06 19:19:58.458214715 +0200
-@@ -92,7 +92,7 @@
+--- phorum-5.2.23/common.php~	2020-11-24 12:23:47.000000000 +0200
++++ phorum-5.2.23/common.php	2020-11-24 12:25:57.349551331 +0200
+@@ -103,7 +103,7 @@
          if (!file_exists("/etc/webapps/phorum/config.php")) { ?>
-             Phorum has been installed on this server, but the configuration<br/>
-             for the database connection has not yet been made. Please read<br/>
+             Phorum has been installed on this server, but the configuration<br />
+             for the database connection has not yet been made. Please read<br />
 -            <a href="docs/install.txt">docs/install.txt</a> for installation
-+            <a href="http://www.phorum.org/phorum5/docs/install.txt">docs/install.txt</a> for installation
++            <a href="https://www.phorum.org/phorum5/docs/install.txt">https://www.phorum.org/phorum5/docs/install.txt</a> for installation
              instructions. <?php
          } else {
              $fp = fopen("/etc/webapps/phorum/config.php", "r");
---- phorum-5.2.14/include/admin/install.php	2010-01-06 19:20:04.822797116 +0200
-+++ phorum-5.2.14-docsurl/include/admin/install.php	2010-01-06 19:19:58.468214501 +0200
-@@ -519,7 +519,7 @@
+--- phorum-5.2.23/include/admin/install.php~	2020-11-24 12:23:47.000000000 +0200
++++ phorum-5.2.23/include/admin/install.php	2020-11-24 12:25:13.710631576 +0200
+@@ -520,7 +520,7 @@
  
-     	$cont_url = phorum_admin_build_url('');
+         $cont_url = phorum_admin_build_url('');
          phorum_db_update_settings( array("installed"=>1) );
--        echo "The setup is complete.  You can now go to <a href=\"$cont_url\">the admin</a> and start making Phorum all your own.<br /><br /><strong>Here are some things you will want to look at:</strong><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=settings\">The General Settings page</a><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=mods\">Pre-installed modules</a><br /><br /><a href=\"docs/faq.txt\">The FAQ</a><br /><br /><a href=\"docs/performance.txt\">How to get peak performance from Phorum</a><br /><br /><strong>For developers:</strong><br /><br /><a href=\"docs/creating_mods.txt\">Module Creation</a><br /><br /><a href=\"docs/permissions.txt\">How Phorum permisssions work</a><br /><br /><a href=\"docs/CODING-STANDARDS\">The Phorum Team's codings standards</a>";
-+        echo "The setup is complete.  You can now go to <a href=\"$cont_url\">the admin</a> and start making Phorum all your own.<br /><br /><strong>Here are some things you will want to look at:</strong><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=settings\">The General Settings page</a><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=mods\">Pre-installed modules</a><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/faq.txt\">The FAQ</a><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/performance.txt\">How to get peak performance from Phorum</a><br /><br /><strong>For developers:</strong><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/creating_mods.txt\">Module Creation</a><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/permissions.txt\">How Phorum permisssions work</a><br /><br /><a href=\"http://www.phorum.org/phorum5/docs/CODING-STANDARDS\">The Phorum Team's codings standards</a>";
+-        echo "The setup is complete.  You can now go to <a href=\"$cont_url\">the admin</a> and start making Phorum all your own.<br /><br /><strong>Here are some things you will want to look at:</strong><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=settings\">The General Settings page</a><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=mods\">Pre-installed modules</a><br /><br /><a href=\"docs/faq.txt\">The FAQ</a><br /><br /><a href=\"docs/performance.txt\">How to get peak performance from Phorum</a><br /><br /><strong>For developers:</strong><br /><br /><a href=\"docs/creating_mods.txt\">Module Creation</a><br /><br /><a href=\"docs/permissions.txt\">How Phorum permisssions work</a><br /><br /><a href=\"docs/CODING-STANDARDS\">The Phorum Team&apos;s codings standards</a>";
++        echo "The setup is complete.  You can now go to <a href=\"$cont_url\">the admin</a> and start making Phorum all your own.<br /><br /><strong>Here are some things you will want to look at:</strong><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=settings\">The General Settings page</a><br /><br /><a href=\"$_SERVER[PHP_SELF]?module=mods\">Pre-installed modules</a><br /><br /><a href=\"https://www.phorum.org/phorum5/docs/faq.txt\">The FAQ</a><br /><br /><a href=\"https://www.phorum.org/phorum5/docs/performance.txt\">How to get peak performance from Phorum</a><br /><br /><strong>For developers:</strong><br /><br /><a href=\"https://www.phorum.org/phorum5/docs/creating_mods.txt\">Module Creation</a><br /><br /><a href=\"https://www.phorum.org/phorum5/docs/permissions.txt\">How Phorum permisssions work</a><br /><br /><a href=\"https://www.phorum.org/phorum5/docs/CODING-STANDARDS\">The Phorum Team&apos;s codings standards</a>";
  
          break;
  
